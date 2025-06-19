@@ -2,7 +2,6 @@ package com.proxod3.nogravityzone.ui.models.post
 
 import com.google.firebase.Timestamp
 
-
 /**
  * Data class representing a like on a post.
  *
