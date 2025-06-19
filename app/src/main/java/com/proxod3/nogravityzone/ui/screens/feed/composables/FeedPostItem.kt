@@ -37,7 +37,6 @@ import com.proxod3.nogravityzone.ui.screens.post_details.FeedPostWithLikesAndCom
 import com.proxod3.nogravityzone.ui.shared_components.HashtagText
 import com.proxod3.nogravityzone.ui.shared_components.PostInteractionRow
 import com.proxod3.nogravityzone.ui.shared_components.ProfileImageSmall
-import com.proxod3.nogravityzone.utils.Utils.formatRelativeTime
 import com.proxod3.nogravityzone.utils.Utils.formatRelativeTimeFromFireStoreTimeStamp
 import com.google.firebase.Timestamp
 

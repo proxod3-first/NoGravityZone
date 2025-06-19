@@ -19,9 +19,9 @@ import com.proxod3.nogravityzone.ui.screens.post_details.FeedPostWithLikesAndCom
 import com.proxod3.nogravityzone.ui.screens.workout_list.WorkoutWithStatus
 import com.google.firebase.Timestamp
 
+
 //sample data to be used in preview functions and testing
 object MockData {
-
 
     // Sample Exercise data
     val sampleExercise = Exercise(
@@ -153,7 +153,7 @@ object MockData {
         description = "This is a sample workout",
         difficulty = "Intermediate",
         workoutDuration = "45",
-dateCreated = Timestamp(Timestamp.now().seconds - (60L * 60 * 24 * 7), 0), // 1 week ago
+        dateCreated = Timestamp(Timestamp.now().seconds - (60L * 60 * 24 * 7), 0), // 1 week ago
         imageUrl = "https://example.com/workout_image.jpg",
         imagePath = "",
         tags = listOf("strength", "cardio"),
@@ -183,42 +183,6 @@ dateCreated = Timestamp(Timestamp.now().seconds - (60L * 60 * 24 * 7), 0), // 1 
             followingCount = 30
         )
     )
-
-    val sampleUser2 = User(
-        id = "",
-        displayName = "Jane Doe",
-        username = "janedoe",
-        email = "janedoe@example.com",
-        joinDate = Timestamp.now(),
-        profilePictureUrl = "https://pbs.twimg.com/profile_images/1240119990411550720/hBEe3tdn_bigger.jpg",
-        bio = "I'm a fitness enthusiast and a software engineer",
-        lastActive = Timestamp.now(),
-        stats = UserStats(
-            postCount = 50,
-            workoutCount = 100,
-            followersCount = 20,
-            followingCount = 10
-        )
-    )
-
-    val sampleUser3 = User(
-        id = "",
-        displayName = "John Smith",
-        username = "johnsmith",
-        email = "johnsmith@example.com",
-        joinDate = Timestamp.now(),
-        profilePictureUrl = "https://pbs.twimg.com/profile_images/1240119990411550720/hBEe3tdn_bigger.jpg",
-        bio = "I'm a fitness enthusiast and a personal trainer",
-        lastActive = Timestamp.now(),
-        stats = UserStats(
-            postCount = 150,
-            workoutCount = 250,
-            followersCount = 60,
-            followingCount = 40
-        )
-    )
-
-    val sampleUserList = listOf(sampleUser, sampleUser2, sampleUser3)
 
     // mock posts
     val samplePost = FeedPost(
@@ -287,7 +251,6 @@ dateCreated = Timestamp(Timestamp.now().seconds - (60L * 60 * 24 * 7), 0), // 1 
         ),
     )
 
-    val sampleCommentList = listOf(sampleComment, sampleComment2)
     val sampleCommentWithLikeStatusList = listOf(
         CommentWithLikeStatus(
             comment = sampleComment,
@@ -298,7 +261,6 @@ dateCreated = Timestamp(Timestamp.now().seconds - (60L * 60 * 24 * 7), 0), // 1 
             isLiked = false
         ),
     )
-
 
     val samplePostWithLikesAndComments = FeedPostWithLikesAndComments(
         post = samplePost,
@@ -331,7 +293,6 @@ dateCreated = Timestamp(Timestamp.now().seconds - (60L * 60 * 24 * 7), 0), // 1 
         isLiked = true,
         isSaved = false
     )
-
 
     val sampleBodyPartList = listOf(BodyPart("Chest"), BodyPart("Back"))
     val sampleEquipmentList = listOf(Equipment("Dumbbell"), Equipment("Barbell"))

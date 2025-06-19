@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Comment
 import androidx.compose.material.icons.filled.Comment
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.Icon
@@ -23,7 +24,6 @@ import androidx.compose.ui.unit.sp
 import com.proxod3.nogravityzone.ui.AppTheme
 import com.proxod3.nogravityzone.ui.models.post.FeedPost
 import com.proxod3.nogravityzone.ui.models.post.PostCreator
-import com.proxod3.nogravityzone.utils.Utils.formatRelativeTime
 import com.proxod3.nogravityzone.utils.Utils.formatRelativeTimeFromFireStoreTimeStamp
 import com.google.firebase.Timestamp
 
@@ -98,7 +98,7 @@ private fun PostInteractionRow(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                imageVector = Icons.Default.Comment,
+                imageVector = Icons.AutoMirrored.Filled.Comment,
                 contentDescription = "Comments",
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(16.dp)

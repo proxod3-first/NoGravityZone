@@ -1,4 +1,3 @@
-
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
@@ -50,29 +49,30 @@ class AndroidImageProcessor @Inject constructor(private val context: Context) : 
      * @param gifUrl URL of the GIF to process
      * @return Path to the saved image or null if processing fails
      */
-    override suspend fun getImagePathFromGif(gifUrl: String): String? = withContext(Dispatchers.IO) {
-        try {
-            // Generate consistent filename from URL
-            val fileName = generateFileName(gifUrl)
-            val file = File(context.externalCacheDir, fileName)
+    override suspend fun getImagePathFromGif(gifUrl: String): String? =
+        withContext(Dispatchers.IO) {
+            try {
+                // Generate consistent filename from URL
+                val fileName = generateFileName(gifUrl)
+                val file = File(context.externalCacheDir, fileName)
 
-            // Return existing file path if already cached
-            if (file.exists() && file.length() > 0) {
-                return@withContext file.path
-            }
+                // Return existing file path if already cached
+                if (file.exists() && file.length() > 0) {
+                    return@withContext file.path
+                }
 
-            // Download and process GIF if not cached
-            val bitmap = loadBitmapFromGif(context, gifUrl)
-            if (bitmap != null && saveImageToDisk(bitmap, file)) {
-                file.path
-            } else {
+                // Download and process GIF if not cached
+                val bitmap = loadBitmapFromGif(context, gifUrl)
+                if (bitmap != null && saveImageToDisk(bitmap, file)) {
+                    file.path
+                } else {
+                    null
+                }
+            } catch (e: Exception) {
+                Log.e("AndroidImageProcessor", "Error processing GIF", e)
                 null
             }
-        } catch (e: Exception) {
-            Log.e("AndroidImageProcessor", "Error processing GIF", e)
-            null
         }
-    }
 
     /**
      * Generates a consistent filename from a GIF URL
@@ -160,17 +160,4 @@ class AndroidImageProcessor @Inject constructor(private val context: Context) : 
             }
         }
     }
-
-
 }
-
-/**
- * Extension function to check if an image file exists in cache
- */
-fun IImageProcessor.isImageCached(gifUrl: String,context: Context): Boolean {
-    val fileName = gifUrl.split("/").last().let {
-        if (it.contains(".")) it.replace(Regex("\\.[^.]*$"), ".png") else "$it.png"
-    }
-    return File(context.externalCacheDir, fileName).exists()
-}
-

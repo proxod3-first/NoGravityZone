@@ -9,10 +9,10 @@ import com.proxod3.nogravityzone.ui.repository.IExerciseRepository
 import com.proxod3.nogravityzone.ui.repository.ResultWrapper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+
 
 data class CachedExerciseDataResult(
     val exercises: List<Exercise>,
@@ -78,12 +78,3 @@ class ExerciseDataManager @Inject constructor(
         }
     }
 }
-
-
-// Data class to hold exercise data results
-data class ExerciseDataResult(
-    val bodyParts: List<BodyPart>,
-    val targets: List<TargetMuscle>,
-    val equipment: List<Equipment>,
-    val exercises: List<Exercise>
-)

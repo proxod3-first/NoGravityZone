@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,8 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FiberManualRecord
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -43,10 +40,8 @@ import com.proxod3.nogravityzone.R
 import com.proxod3.nogravityzone.ui.AppTheme
 import com.proxod3.nogravityzone.ui.shared_components.ProfileImageSmall
 import com.proxod3.nogravityzone.ui.models.User
-import com.proxod3.nogravityzone.utils.Utils.formatRelativeTime
 import com.proxod3.nogravityzone.utils.Utils.formatRelativeTimeFromFireStoreTimeStamp
 import com.google.firebase.Timestamp
-import java.util.Date
 
 //todo open user profile on click
 @OptIn(ExperimentalLayoutApi::class)
@@ -56,27 +51,9 @@ fun DiscoverProfile(
     onFollowClick: () -> Unit,
     isFollowedByLocalUser: Boolean?,
     onProfileClick: (String?) -> Unit,
-    modifier: Modifier = Modifier
 ) {
-    // Animation states
-    var isPressed by remember { mutableStateOf(false) }
-    val scale by animateFloatAsState(
-        targetValue = if (isPressed) 0.95f else 1f,
-        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy)
-    )
 
-    // Animated color for the follow button
-    val buttonColor by animateColorAsState(
-        targetValue = if (isFollowedByLocalUser == true)
-            MaterialTheme.colorScheme.surfaceVariant
-        else
-            MaterialTheme.colorScheme.primary,
-        label = "buttonColor"
-    )
-
-
-
-        Column(
+    Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
@@ -234,35 +211,6 @@ private fun AnimatedStatsCounter(
     }
 }
 
-
-@Composable
-private fun AnimatedFollowButton(
-    isFollowed: Boolean?,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val backgroundColor by animateColorAsState(
-        targetValue = if (isFollowed == true)
-            MaterialTheme.colorScheme.surfaceVariant
-        else
-            MaterialTheme.colorScheme.primary,
-        label = "backgroundColor"
-    )
-
-    Button(
-        onClick = onClick,
-        modifier = modifier,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = backgroundColor
-        ),
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
-    ) {
-        Text(
-            text = if (isFollowed == true) "Following" else "Follow",
-            style = MaterialTheme.typography.labelLarge
-        )
-    }
-}
 
 @Preview(showBackground = true)
 @Composable
