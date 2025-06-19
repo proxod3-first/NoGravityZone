@@ -1,6 +1,5 @@
 package com.proxod3.nogravityzone.ui.repository
 
-import android.net.Uri
 import android.util.Log
 import com.proxod3.nogravityzone.Constants
 import com.proxod3.nogravityzone.ui.models.workout.Workout
@@ -19,10 +18,6 @@ import com.proxod3.nogravityzone.ui.room.AppDatabase
 import com.proxod3.nogravityzone.ui.screens.workout_list.SortType
 import com.proxod3.nogravityzone.utils.Utils.generateRandomId
 import com.google.firebase.Timestamp
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ServerValue
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.storage.FirebaseStorage
@@ -35,7 +30,7 @@ import javax.inject.Inject
 import androidx.core.net.toUri
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Query
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+
 
 // Workout and exercise management
 interface IWorkoutRepository {
@@ -77,7 +72,7 @@ class WorkoutRepository @Inject constructor(
             }
         } catch (e: Exception) {
             Log.e("WorkoutRepository", "Error fetching workout: $workoutId", e)
-            null // Return null on error
+            null
         }
     }
 
@@ -104,7 +99,6 @@ class WorkoutRepository @Inject constructor(
                         trySend(ResultWrapper.Error(Exception("Error parsing workout data", e)))
                     }
                 } else {
-                    // Document doesn't exist
                     trySend(ResultWrapper.Success(null))
                 }
             }
@@ -129,7 +123,7 @@ class WorkoutRepository @Inject constructor(
             ResultWrapper.Success("") // Empty string if no image
         }
 
-        val imageUrl = when(imageUrlResult) {
+        val imageUrl = when (imageUrlResult) {
             is ResultWrapper.Success -> imageUrlResult.data
             is ResultWrapper.Error -> return ResultWrapper.Error(imageUrlResult.exception) // Return early on upload failure
             is ResultWrapper.Loading -> return ResultWrapper.Error(Exception("Image upload still loading - unexpected"))
@@ -162,8 +156,11 @@ class WorkoutRepository @Inject constructor(
             return ResultWrapper.Success(Unit)
 
         } catch (e: Exception) {
-            Log.e("WorkoutRepository", "Error committing workout upload batch for ${workoutWithImage.id}", e)
-            // TODO:  deleting uploaded image if batch fails?
+            Log.e(
+                "WorkoutRepository",
+                "Error committing workout upload batch for ${workoutWithImage.id}",
+                e
+            )
             return ResultWrapper.Error(e)
         }
     }
@@ -203,9 +200,12 @@ class WorkoutRepository @Inject constructor(
         val batch = firestore.batch()
         return try {
             // 2. Find associated likes and saves (consider doing this less frequently or via Functions)
-            // This adds read cost to every delete.
-            val likesQuery = workoutLikesCollection.whereEqualTo(WorkoutLike.WORKOUT_ID_FIELD, workoutId).get().await()
-            val savesQuery = workoutSavesCollection.whereEqualTo(WorkoutSave.WORKOUT_ID_FIELD, workoutId).get().await()
+            val likesQuery =
+                workoutLikesCollection.whereEqualTo(WorkoutLike.WORKOUT_ID_FIELD, workoutId).get()
+                    .await()
+            val savesQuery =
+                workoutSavesCollection.whereEqualTo(WorkoutSave.WORKOUT_ID_FIELD, workoutId).get()
+                    .await()
             val likeRefsToDelete = likesQuery.documents.map { it.reference }
             val saveRefsToDelete = savesQuery.documents.map { it.reference }
 
@@ -218,17 +218,23 @@ class WorkoutRepository @Inject constructor(
 
             // b) Delete associated likes
             likeRefsToDelete.forEach { batch.delete(it) }
+
             // c) Delete associated saves
             saveRefsToDelete.forEach { batch.delete(it) }
-            Log.d("WorkoutRepository", "Prepared batch to delete ${likeRefsToDelete.size} likes and ${saveRefsToDelete.size} saves for workout $workoutId")
-
+            Log.d(
+                "WorkoutRepository",
+                "Prepared batch to delete ${likeRefsToDelete.size} likes and ${saveRefsToDelete.size} saves for workout $workoutId"
+            )
 
             // d) Decrement/delete hashtags using the refactored repository
             hashtagRepository.addHashtagDecrementToBatch(batch, workout.tags)
 
             // 5. Commit the batch
             batch.commit().await()
-            Log.d("WorkoutRepository", "Workout $workoutId and associated data deleted from Firestore.")
+            Log.d(
+                "WorkoutRepository",
+                "Workout $workoutId and associated data deleted from Firestore."
+            )
 
             // 6. Delete cover image from Storage (after successful batch commit)
             if (workout.imageUrl.isNotEmpty()) {
@@ -241,7 +247,6 @@ class WorkoutRepository @Inject constructor(
             ResultWrapper.Error(e)
         }
     }
-
 
     /**
      * Deletes a workout's cover image from storage
@@ -258,26 +263,39 @@ class WorkoutRepository @Inject constructor(
         }
     }
 
-
-    override suspend fun isWorkoutLikedByUser(workoutId: String, userId: String): ResultWrapper<Boolean> {
+    override suspend fun isWorkoutLikedByUser(
+        workoutId: String,
+        userId: String
+    ): ResultWrapper<Boolean> {
         return try {
             val likeDocId = WorkoutLike.createId(userId, workoutId)
             val snapshot = workoutLikesCollection.document(likeDocId).get().await()
             ResultWrapper.Success(snapshot.exists())
         } catch (e: Exception) {
-            Log.e("WorkoutRepository", "Error checking like status for workout $workoutId by user $userId", e)
+            Log.e(
+                "WorkoutRepository",
+                "Error checking like status for workout $workoutId by user $userId",
+                e
+            )
             ResultWrapper.Error(e)
         }
     }
 
 
-    override suspend fun isWorkoutSavedByUser(workoutId: String, userId: String): ResultWrapper<Boolean> {
+    override suspend fun isWorkoutSavedByUser(
+        workoutId: String,
+        userId: String
+    ): ResultWrapper<Boolean> {
         return try {
             val saveDocId = WorkoutSave.createId(userId, workoutId)
             val snapshot = workoutSavesCollection.document(saveDocId).get().await()
             ResultWrapper.Success(snapshot.exists())
         } catch (e: Exception) {
-            Log.e("WorkoutRepository", "Error checking save status for workout $workoutId by user $userId", e)
+            Log.e(
+                "WorkoutRepository",
+                "Error checking save status for workout $workoutId by user $userId",
+                e
+            )
             ResultWrapper.Error(e)
         }
     }
@@ -288,7 +306,7 @@ class WorkoutRepository @Inject constructor(
         return try {
             // Check current backend state
             val isCurrentlySavedResult = isWorkoutSavedByUser(workout.id, userId)
-            val isCurrentlySaved = when(isCurrentlySavedResult) {
+            val isCurrentlySaved = when (isCurrentlySavedResult) {
                 is ResultWrapper.Success -> isCurrentlySavedResult.data
                 is ResultWrapper.Error -> throw isCurrentlySavedResult.exception // Propagate error
                 is ResultWrapper.Loading -> throw IllegalStateException("isWorkoutSavedByUser returned Loading")
@@ -300,13 +318,16 @@ class WorkoutRepository @Inject constructor(
             val metricsSaveCountPath = "$WORKOUTS_METRICS.$WORKOUT_SAVE_COUNT"
 
             if (isCurrentlySaved) {
-                // --- Unsave Logic ---
+                // Unsave Logic
                 batch.delete(saveDocRef)
                 batch.update(workoutDocRef, metricsSaveCountPath, FieldValue.increment(-1))
-                Log.d("WorkoutRepository", "Prepared batch to UNSAVE workout $workout.id for user $userId")
+                Log.d(
+                    "WorkoutRepository",
+                    "Prepared batch to UNSAVE workout $workout.id for user $userId"
+                )
 
             } else {
-                // --- Save Logic ---
+                // Save Logic
                 val saveObject = WorkoutSave(
                     id = saveDocId,
                     userId = userId,
@@ -315,12 +336,18 @@ class WorkoutRepository @Inject constructor(
                 )
                 batch.set(saveDocRef, saveObject)
                 batch.update(workoutDocRef, metricsSaveCountPath, FieldValue.increment(1))
-                Log.d("WorkoutRepository", "Prepared batch to SAVE workout $workout.id for user $userId")
+                Log.d(
+                    "WorkoutRepository",
+                    "Prepared batch to SAVE workout $workout.id for user $userId"
+                )
             }
 
             // Commit the batch
             batch.commit().await()
-            Log.d("WorkoutRepository", "Workout save toggled successfully for workout ${workout.id}")
+            Log.d(
+                "WorkoutRepository",
+                "Workout save toggled successfully for workout ${workout.id}"
+            )
             ResultWrapper.Success(Unit)
 
         } catch (e: Exception) {
@@ -328,7 +355,6 @@ class WorkoutRepository @Inject constructor(
             ResultWrapper.Error(e)
         }
     }
-
 
     /**
      * Deletes a workout from local storage
@@ -369,8 +395,10 @@ class WorkoutRepository @Inject constructor(
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override suspend fun getWorkouts(sortType: SortType, limit: Int): Flow<ResultWrapper<List<Workout>>> = callbackFlow {
+    override suspend fun getWorkouts(
+        sortType: SortType,
+        limit: Int
+    ): Flow<ResultWrapper<List<Workout>>> = callbackFlow {
         trySend(ResultWrapper.Loading()) // Emit loading state
 
         var query: Query = workoutsCollection // Base query
@@ -378,8 +406,15 @@ class WorkoutRepository @Inject constructor(
         // Apply sorting based on sortType
         query = when (sortType) {
             SortType.NEWEST -> query.orderBy(WORKOUTS_TIMESTAMP, Query.Direction.DESCENDING)
-            SortType.MOST_LIKED -> query.orderBy("$WORKOUTS_METRICS.$WORKOUT_LIKES_COUNT", Query.Direction.DESCENDING)
-            SortType.MOST_SAVED -> query.orderBy("$WORKOUTS_METRICS.$WORKOUT_SAVE_COUNT", Query.Direction.DESCENDING)
+            SortType.MOST_LIKED -> query.orderBy(
+                "$WORKOUTS_METRICS.$WORKOUT_LIKES_COUNT",
+                Query.Direction.DESCENDING
+            )
+
+            SortType.MOST_SAVED -> query.orderBy(
+                "$WORKOUTS_METRICS.$WORKOUT_SAVE_COUNT",
+                Query.Direction.DESCENDING
+            )
         }
 
         // Apply limit
@@ -390,12 +425,18 @@ class WorkoutRepository @Inject constructor(
             listenerRegistration = query.addSnapshotListener { snapshot, error ->
                 if (error != null) {
                     trySend(ResultWrapper.Error(error))
-                    Log.e("WorkoutRepository", "Error listening to workouts (sort: $sortType)", error)
+                    Log.e(
+                        "WorkoutRepository",
+                        "Error listening to workouts (sort: $sortType)",
+                        error
+                    )
                     return@addSnapshotListener
                 }
                 if (snapshot != null) {
                     val workouts = snapshot.documents.mapNotNull { doc ->
-                        try { doc.toObject(Workout::class.java) } catch (e: Exception) {
+                        try {
+                            doc.toObject(Workout::class.java)
+                        } catch (e: Exception) {
                             Log.e("WorkoutRepository", "Error converting workout doc ${doc.id}", e)
                             null
                         }
@@ -407,17 +448,14 @@ class WorkoutRepository @Inject constructor(
                 }
             }
         } catch (e: Exception) {
-            // Error setting up the listener
             trySend(ResultWrapper.Error(e))
             close(e)
         }
-
         awaitClose {
             Log.d("WorkoutRepository", "Removing listener for workouts (sort: $sortType)")
             listenerRegistration?.remove()
         }
     }
-
 
     /**
      * Saves a workout to local storage for offline access
@@ -432,7 +470,5 @@ class WorkoutRepository @Inject constructor(
             ResultWrapper.Error(e)
         }
     }
-
-
 }
 

@@ -2,13 +2,13 @@ package com.proxod3.nogravityzone.ui.repository
 
 
 sealed class ResultWrapper<out T>(open val isLoading: Boolean = false) {
-    data class Success<T>(val data: T, override val isLoading: Boolean = false) : ResultWrapper<T>(isLoading)
-    data class Loading(override val isLoading: Boolean = true) : ResultWrapper<Nothing>(isLoading)
-    data class Error(val exception: Exception, override val isLoading: Boolean = false) : ResultWrapper<Nothing>(isLoading)
-}
+    data class Success<T>(val data: T, override val isLoading: Boolean = false) :
+        ResultWrapper<T>(isLoading)
 
-fun <T> ResultWrapper<T>?.orEmpty(defaultValue: T): T {
-    return (this as? ResultWrapper.Success<T>)?.data ?: defaultValue
+    data class Loading(override val isLoading: Boolean = true) : ResultWrapper<Nothing>(isLoading)
+
+    data class Error(val exception: Exception, override val isLoading: Boolean = false) :
+        ResultWrapper<Nothing>(isLoading)
 }
 
 fun <T> ResultWrapper<T>.onSuccess(action: (T) -> Unit): ResultWrapper<T> {
