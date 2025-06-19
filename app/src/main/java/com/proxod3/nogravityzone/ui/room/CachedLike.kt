@@ -25,5 +25,3 @@ enum class LikeType {
     COMMENT,
     WORKOUT
 }
-
-

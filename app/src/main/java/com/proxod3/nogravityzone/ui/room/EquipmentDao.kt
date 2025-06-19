@@ -14,6 +14,3 @@ interface EquipmentDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(equipmentList: List<Equipment>)
 }
-
-
-

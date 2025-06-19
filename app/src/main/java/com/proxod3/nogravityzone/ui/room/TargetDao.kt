@@ -14,5 +14,3 @@ interface TargetDao {
     @Query("SELECT * FROM targets")
     suspend fun getAll(): List<TargetMuscle>
 }
-
-

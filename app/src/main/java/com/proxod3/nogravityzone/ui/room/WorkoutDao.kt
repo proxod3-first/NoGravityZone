@@ -17,7 +17,7 @@ interface WorkoutDao {
     suspend fun getAllWorkouts(): List<WorkoutEntity>
 
     @Query("SELECT * FROM workouts")
-     fun getAllWorkoutsFlow(): Flow<List<WorkoutEntity>>
+    fun getAllWorkoutsFlow(): Flow<List<WorkoutEntity>>
 
     @Query("DELETE FROM workouts WHERE id = :workoutId")
     suspend fun deleteWorkoutById(workoutId: String)
