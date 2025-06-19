@@ -52,7 +52,7 @@ import com.proxod3.nogravityzone.ui.models.post.FeedPost
 import com.proxod3.nogravityzone.ui.screens.post_details.FeedPostWithLikesAndComments
 import com.proxod3.nogravityzone.ui.shared_components.CustomTopAppBar
 import com.proxod3.nogravityzone.ui.shared_components.LoadingIndicator
-import com.proxod3.nogravityzone.ui.theme.screens.feed.composables.FeedPostItem
+import com.proxod3.nogravityzone.ui.screens.feed.composables.FeedPostItem
 import com.proxod3.nogravityzone.utils.MockData.samplePostWithLikesAndComments
 import com.proxod3.nogravityzone.utils.MockData.samplePostWithLikesAndCommentsList
 import kotlinx.coroutines.delay

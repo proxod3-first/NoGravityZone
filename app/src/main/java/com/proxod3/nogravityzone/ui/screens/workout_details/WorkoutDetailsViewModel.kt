@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 @HiltViewModel
 class WorkoutDetailsViewModel @Inject constructor(
     private val workoutRepository: IWorkoutRepository,
@@ -28,8 +29,6 @@ class WorkoutDetailsViewModel @Inject constructor(
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(WorkoutDetailsUiData())
     var uiState = _uiState.asStateFlow()
-
-
 
     fun observeWorkoutChanges() {
         viewModelScope.launch {
@@ -44,14 +43,14 @@ class WorkoutDetailsViewModel @Inject constructor(
                         workoutResult.onSuccess { workout ->
                             viewModelScope.launch {
 
-                            if (workout != null) {
-                                // Collect like status
-                                val isLikedFlow = likeRepository.observeLikeStatus(
-                                    targetId = workout.id,
-                                    type = LikeType.WORKOUT
-                                ).first()
+                                if (workout != null) {
+                                    // Collect like status
+                                    val isLikedFlow = likeRepository.observeLikeStatus(
+                                        targetId = workout.id,
+                                        type = LikeType.WORKOUT
+                                    ).first()
 
-                                // Handle the ResultWrapper from isWorkoutSavedByUser
+                                    // Handle the ResultWrapper from isWorkoutSavedByUser
                                     val isSavedResult = workoutRepository.isWorkoutSavedByUser(
                                         workout.id,
                                         userRepository.getCurrentUserId()
@@ -88,43 +87,6 @@ class WorkoutDetailsViewModel @Inject constructor(
         }
     }
 
-
-    fun toggleWorkoutLike(workout: Workout) = viewModelScope.launch {
-        try {
-            val userId = userRepository.getCurrentUserId()
-            likeRepository.toggleLike(
-                targetId = workout.id,
-                type = LikeType.WORKOUT,
-                userId = userId,
-            )
-        } catch (e: Exception) {
-            _uiState.update { it.copy(isLoading = false, error = e.message) }
-        }
-    }
-
-
-    fun toggleWorkoutSave(workout: Workout) = viewModelScope.launch {
-        try {
-            val userId = userRepository.getCurrentUserId()
-            val result = workoutRepository.toggleWorkoutSave(workout, userId)
-
-            if (result is ResultWrapper.Success) {
-                val isSaved = workoutRepository.isWorkoutSavedByUser(
-                    workout.id,
-                    userId
-                ) as? ResultWrapper.Success
-                if (isSaved?.data == true) {
-                    workoutRepository.saveWorkoutLocally(workout)
-                } else {
-                    workoutRepository.deleteWorkoutLocally(workout.id)
-                }
-            }
-        } catch (e: Exception) {
-            _uiState.update { it.copy(isLoading = false, error = e.message) }
-        }
-    }
-
-
     fun setWorkoutDetails(workout: Workout, isLiked: Boolean, isSaved: Boolean) {
         _uiState.update {
             it.copy(
@@ -136,14 +98,10 @@ class WorkoutDetailsViewModel @Inject constructor(
             )
         }
     }
-
-
 }
-
 
 data class WorkoutDetailsUiData(
     val workoutWithStatus: WorkoutWithStatus? = null,
     val isLoading: Boolean = false,
     val error: String? = null
 )
-

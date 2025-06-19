@@ -16,12 +16,14 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 data class SignInFormData(
     val email: String = "",
     val password: String = "",
     val isEmailValid: Boolean = false,
     val isPasswordValid: Boolean = false
 )
+
 
 sealed class SignInUiState {
     object Initial : SignInUiState()
@@ -46,7 +48,7 @@ class SignInViewModel @Inject constructor(private val repository: AuthRepository
         _formData.update {
             it.copy(
                 password = password, isPasswordValid =
-                Utils.isValidFieldLength(password, Constants.MINIMUM_PASSWORD_LENGTH)
+                    Utils.isValidFieldLength(password, Constants.MINIMUM_PASSWORD_LENGTH)
             )
         }
     }
@@ -80,6 +82,5 @@ class SignInViewModel @Inject constructor(private val repository: AuthRepository
             else -> null
         }
     }
-
 }
 

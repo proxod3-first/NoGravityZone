@@ -146,6 +146,7 @@ class WorkoutListViewModel @Inject constructor(
                             }
                             flowOf(emptyList())
                         }
+
                         is ResultWrapper.Loading -> {
                             _uiData.update { it.copy(isLoading = true) }
                             flowOf(emptyList())
@@ -174,7 +175,10 @@ class WorkoutListViewModel @Inject constructor(
         }
     }
 
-    private fun processWorkouts(workouts: List<Workout>, userId: String): Flow<List<WorkoutWithStatus>> {
+    private fun processWorkouts(
+        workouts: List<Workout>,
+        userId: String
+    ): Flow<List<WorkoutWithStatus>> {
         // Handle empty workout list case
         if (workouts.isEmpty()) {
             return flowOf(emptyList())
@@ -206,8 +210,6 @@ class WorkoutListViewModel @Inject constructor(
     }
 
 
-
-
     fun updateSearchQuery(query: String) {
         _uiData.update { it.copy(searchQuery = query) }
     }
@@ -237,7 +239,6 @@ enum class SortType {
     MOST_SAVED
 }
 
-
 data class WorkoutListUiData(
     val workoutWithStatusList: List<WorkoutWithStatus> = emptyList(),
     val localWorkouts: List<Workout> = emptyList(),
@@ -246,4 +247,3 @@ data class WorkoutListUiData(
     val isLoading: Boolean = false,
     val error: String? = null
 )
-

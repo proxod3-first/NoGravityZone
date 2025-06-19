@@ -70,8 +70,10 @@ fun SignInScreen(
 
         is SignInUiState.Error -> {
             // Show error message
-            val errorMessage= stringResource((uiState as SignInUiState.Error).messageStringResource)
-            showToast(context,
+            val errorMessage =
+                stringResource((uiState as SignInUiState.Error).messageStringResource)
+            showToast(
+                context,
                 errorMessage,
             )
         }

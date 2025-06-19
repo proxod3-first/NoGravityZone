@@ -226,7 +226,7 @@ fun WorkoutDetailedComposablePreview() {
         WorkoutDetailedComposable(
             workoutWithStatus = sampleWorkoutWithStatus,
             detailedOnlyParams = DetailedOnlyParams(),
-            )
+        )
     }
 }
 
@@ -295,12 +295,12 @@ fun WorkoutExercisesMiniComposablePreview() {
     MaterialTheme {
         WorkoutExerciseMiniComposable(
             workoutExercise =
-            WorkoutExercise(
-                exercise = Exercise(name = "Squats"),
-                sets = 4,
-                reps = 12,
-                order = 1
-            ),
+                WorkoutExercise(
+                    exercise = Exercise(name = "Squats"),
+                    sets = 4,
+                    reps = 12,
+                    order = 1
+                ),
         )
     }
 }

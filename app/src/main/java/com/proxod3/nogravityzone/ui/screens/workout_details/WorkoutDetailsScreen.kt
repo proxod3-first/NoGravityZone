@@ -20,6 +20,7 @@ import com.proxod3.nogravityzone.ui.shared_components.ErrorComponent
 import com.proxod3.nogravityzone.ui.shared_components.LoadingIndicator
 import com.proxod3.nogravityzone.utils.MockData.sampleWorkoutExerciseList
 
+
 @Composable
 fun WorkoutDetailsScreen(
     workout: Workout,
@@ -53,7 +54,7 @@ private fun WorkoutDetailsContent(
 ) {
     Column {
         CustomTopAppBar(
-            title =  "Workout Details",
+            title = "Workout Details",
             navigationIcon = Icons.AutoMirrored.Filled.ArrowBack,
             onNavigationClick = { navigateBack() },
         )

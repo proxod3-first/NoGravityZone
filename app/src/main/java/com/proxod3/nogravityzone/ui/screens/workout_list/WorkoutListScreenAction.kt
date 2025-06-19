@@ -7,6 +7,7 @@ sealed interface WorkoutListScreenAction {
     data class OnSortPreferenceSelected(val sortType: SortType) : WorkoutListScreenAction
     data class OnWorkoutClick(val workout: Workout, val isLiked: Boolean, val isSaved: Boolean) :
         WorkoutListScreenAction
+
     data object OnRetry : WorkoutListScreenAction
     data class OnWorkoutLike(val workout: Workout) : WorkoutListScreenAction
     data class OnWorkoutSave(val workout: Workout) : WorkoutListScreenAction

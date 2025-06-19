@@ -36,6 +36,7 @@ import com.proxod3.nogravityzone.ui.shared_components.CustomTextField
 import com.proxod3.nogravityzone.ui.shared_components.LoadingIndicator
 import com.proxod3.nogravityzone.utils.Utils.showToast
 
+
 @Composable
 fun SignUpScreen(
     onSignUpSuccess: () -> Unit,
@@ -63,18 +64,14 @@ fun SignUpScreen(
         LoadingIndicator()
     } else if (uiState is SignUpUiState.Error) {
         val errorMessage = stringResource(uiState.messageStringResource)
-        showToast(context,
+        showToast(
+            context,
             errorMessage,
         )
     } else if (uiState is SignUpUiState.Success) {
         onSignUpSuccess()
     }
-
-
 }
-
-
-
 
 @Composable
 fun SignUpScreenContent(

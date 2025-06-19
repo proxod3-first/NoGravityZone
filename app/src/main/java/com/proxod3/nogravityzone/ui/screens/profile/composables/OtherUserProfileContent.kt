@@ -110,8 +110,6 @@ private fun FollowButton(
 }
 
 
-
-
 @Preview(showBackground = true)
 @Composable
 fun OtherUserProfileContentPreview() {
@@ -126,17 +124,17 @@ fun OtherUserProfileContentPreview() {
     val workouts = emptyList<WorkoutWithStatus>()
     val isOwnProfile = false
     val exerciseList = emptyList<Exercise>()
-AppTheme {
-    OtherUserProfileContent(
-        uiData = ProfileUiData(
-            user = user,
-            posts = posts,
-            isFollowing = isFollowing,
-            workoutWithStatusList = workouts,
-            isOwnProfile = isOwnProfile,
-            exerciseList = exerciseList
-        ),
-        onAction = {}
-    )
-}
+    AppTheme {
+        OtherUserProfileContent(
+            uiData = ProfileUiData(
+                user = user,
+                posts = posts,
+                isFollowing = isFollowing,
+                workoutWithStatusList = workouts,
+                isOwnProfile = isOwnProfile,
+                exerciseList = exerciseList
+            ),
+            onAction = {}
+        )
+    }
 }
