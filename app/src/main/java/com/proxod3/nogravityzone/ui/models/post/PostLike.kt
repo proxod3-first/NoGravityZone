@@ -17,11 +17,9 @@ data class PostLike(
     val userId: String = "",
     val postId: String = "",
     val timestamp: Timestamp = Timestamp.now(),
-)
- {
+) {
     companion object {
         fun createId(userId: String, postId: String) = "${userId}_${postId}"
         const val POST_LIKES_COLLECTION = "post_likes" // Collection name for post likes
     }
-
 }
