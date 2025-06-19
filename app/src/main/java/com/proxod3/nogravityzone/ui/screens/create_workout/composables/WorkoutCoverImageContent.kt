@@ -39,11 +39,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.proxod3.nogravityzone.BuildConfig
 import com.proxod3.nogravityzone.R
 import com.proxod3.nogravityzone.ui.models.workout.Workout
 import com.proxod3.nogravityzone.utils.MockData.sampleWorkout
 import kotlinx.coroutines.launch
+
 
 @Composable
 internal fun WorkoutCoverImageContent(
@@ -86,7 +86,7 @@ internal fun WorkoutCoverImageContent(
                 .clip(RoundedCornerShape(16.dp))
                 .shadow(elevation = 8.dp, shape = RoundedCornerShape(16.dp))
                 .background(MaterialTheme.colorScheme.surface)
-                .clickable{
+                .clickable {
                     launcher.launch("image/*") // Launch image picker on click
                 },
             contentAlignment = Alignment.Center

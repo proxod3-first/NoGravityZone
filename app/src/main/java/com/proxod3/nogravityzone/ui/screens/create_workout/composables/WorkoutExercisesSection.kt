@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import com.proxod3.nogravityzone.ui.models.Exercise
 import com.proxod3.nogravityzone.ui.models.workout.WorkoutExercise
 
+
 @Composable
 internal fun WorkoutExercisesSection(
     exerciseList: List<WorkoutExercise>,

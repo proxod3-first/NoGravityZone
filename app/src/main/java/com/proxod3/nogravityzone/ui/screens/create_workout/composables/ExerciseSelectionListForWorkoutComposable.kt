@@ -30,7 +30,6 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -130,7 +129,6 @@ private fun ExerciseSelectionListForWorkoutComposable(
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         TopBar(
-            onNavigateBack = { onEvent(CreateWorkoutAction.NavigateBack) },
             onShowFilters = { onEvent(CreateWorkoutAction.ShowFilterSheet) },
             onSave = { onEvent(CreateWorkoutAction.ToggleExerciseWorkoutListShow) }
         )
@@ -156,7 +154,6 @@ private fun ExerciseSelectionListForWorkoutComposable(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TopBar(
-    onNavigateBack: () -> Unit,
     onShowFilters: () -> Unit,
     onSave: () -> Unit
 ) {
@@ -224,8 +221,6 @@ fun ExerciseList(
                 EmptyComponent(text = "No exercises found")
             }
         }
-
-
 
 
 @Composable
@@ -498,11 +493,11 @@ fun WorkoutExerciseListScreenPreview() {
                 searchQuery = "",
                 showExerciseDialog = false,
                 selectedExercise = null,
-                validationState = UiState.ValidationState(),    // No validation errors
+                validationState = UiState.ValidationState(),
                 workout = sampleWorkout,
 
             ),
-            onEvent = {},    // No-op
+            onEvent = {},
         )
     }
 }

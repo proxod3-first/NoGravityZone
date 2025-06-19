@@ -112,7 +112,7 @@ fun CreatePostContent(
             navigationIcon = Icons.AutoMirrored.Filled.ArrowBack,
             onNavigationClick = onNavigateBack,
             actionIcons = listOf(
-               Icons.Filled.PostAdd
+                Icons.Filled.PostAdd
             ),
             disabledActionIcons = if (!uiState.isPostButtonEnabled) listOf(Icons.Filled.PostAdd) else emptyList(), // Disable the PostAdd icon if post is empty
             onActionClicks = listOf {
@@ -125,11 +125,11 @@ fun CreatePostContent(
 
         if (uiState.isLoading) {
             // Show loading indicator
-             LoadingIndicator()
+            LoadingIndicator()
             return@Column
-        }else if (uiState.error != null) {
+        } else if (uiState.error != null) {
             // Show error message
-             ErrorComponent(text = stringResource( uiState.error))
+            ErrorComponent(text = stringResource(uiState.error))
             return@Column
         }
 

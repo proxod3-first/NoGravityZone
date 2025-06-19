@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 data class CreatePostUiState(
     val isLoading: Boolean = false,
     val error: Int? = null,
@@ -176,10 +177,6 @@ class CreatePostViewModel @Inject constructor(
 
     fun updatePostContent(newPostContent: String) {
         _uiState.update { it.copy(feedPost = it.feedPost.copy(content = newPostContent)) }
-    }
-
-    fun onImagePicked(uris: List<Uri>) {
-        _uiState.update { it.copy(selectedImages = uris) }
     }
 
     fun onImageRemoved(uri: Uri) {
