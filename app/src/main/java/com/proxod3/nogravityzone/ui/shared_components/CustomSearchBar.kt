@@ -1,4 +1,3 @@
-
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -35,9 +34,11 @@ fun CustomSearchBar(
                 fontSize = 16.sp
             )
         },
-        leadingIcon = {  IconButton(onClick = { /* Handle search click */ }) {
-            Icon(Icons.Default.Search, contentDescription = "Search icon")
-        } },
+        leadingIcon = {
+            IconButton(onClick = { /* Handle search click */ }) {
+                Icon(Icons.Default.Search, contentDescription = "Search icon")
+            }
+        },
         trailingIcon = {
 
         },
@@ -54,5 +55,5 @@ fun CustomSearchBar(
 @Preview(showBackground = true)
 @Composable
 fun PreviewSearchBar() {
-    CustomSearchBar("Search",{}, "")
+    CustomSearchBar("Search", {}, "")
 }

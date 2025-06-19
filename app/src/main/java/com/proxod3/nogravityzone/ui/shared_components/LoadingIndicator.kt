@@ -1,4 +1,5 @@
 package com.proxod3.nogravityzone.ui.shared_components
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,7 +34,10 @@ import kotlinx.coroutines.delay
  * @param modifier the modifier to apply to the indicator.
  */
 @Composable
-fun LoadingIndicator(message: String? = null, modifier: Modifier = Modifier.testTag("loading_indicator")) {
+fun LoadingIndicator(
+    message: String? = null,
+    modifier: Modifier = Modifier.testTag("loading_indicator")
+) {
     var loadingMessage by remember { mutableStateOf(message ?: "") }
 
     // Coroutine to update the dots in the message dynamically
@@ -52,8 +56,7 @@ fun LoadingIndicator(message: String? = null, modifier: Modifier = Modifier.test
 
     Box(
         modifier = modifier
-            .fillMaxSize()
-            ,
+            .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         // Centered content
@@ -61,14 +64,14 @@ fun LoadingIndicator(message: String? = null, modifier: Modifier = Modifier.test
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            if (loadingMessage.isNullOrBlank()) {
-            CircularProgressIndicator(
-                modifier = Modifier.size(50.dp)
-            )
+            if (loadingMessage.isBlank()) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(50.dp)
+                )
             }
 
             // Show the text only if a message is provided
-            if (!loadingMessage.isNullOrBlank()) {
+            if (loadingMessage.isNotBlank()) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = loadingMessage,
@@ -81,8 +84,7 @@ fun LoadingIndicator(message: String? = null, modifier: Modifier = Modifier.test
 }
 
 
-
-@Preview(uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES,showSystemUi = true)
+@Preview(uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES, showSystemUi = true)
 @Composable
 fun LoadingIndicatorPreview() {
     LoadingIndicator(message = "Loading")

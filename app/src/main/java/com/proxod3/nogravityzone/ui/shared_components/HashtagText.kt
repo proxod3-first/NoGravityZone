@@ -81,7 +81,9 @@ fun HashtagText(
 @Composable
 fun HashtagTextPreview() {
     HashtagText(
-        text = "Hello #world", onHashtagClick = {}, style = MaterialTheme.typography.titleLarge.copy(
+        text = "Hello #world",
+        onHashtagClick = {},
+        style = MaterialTheme.typography.titleLarge.copy(
             fontWeight = FontWeight.Bold,
             letterSpacing = 0.5.sp
         )

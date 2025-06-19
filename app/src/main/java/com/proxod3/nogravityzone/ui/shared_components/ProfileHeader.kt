@@ -125,7 +125,7 @@ fun StatsRow(stats: UserStats, modifier: Modifier) {
         StatItem(label = "Posts", value = stats.postCount.toString())
         StatItem(label = "Followers", value = stats.followersCount.toString())
         StatItem(label = "Following", value = stats.followingCount.toString())
-}
+    }
 }
 
 @Composable
@@ -162,7 +162,7 @@ private fun EditableProfileImage(
                 },
             ),
 
-    ) {
+        ) {
         // Profile Image
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
@@ -211,7 +211,6 @@ private fun EditableProfileImage(
 }
 
 
-
 @Composable
 private fun StatItem(
     label: String,
@@ -245,22 +244,22 @@ private fun StatItem(
 @Composable
 fun PreviewProfileHeader() {
     AppTheme {
-    ProfileHeader(
-        user = User(
-            profilePictureUrl = "https://picsum.photos/512/512",
-            displayName = "John Doe",
-            bio = "Software Engineer"
-        ),
-        isOwnProfile = true,
-        stats = UserStats(
-            postCount = 10,
-            followersCount = 100,
-            followingCount = 50,
-            workoutCount = 20
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    )
-   }
+        ProfileHeader(
+            user = User(
+                profilePictureUrl = "https://picsum.photos/512/512",
+                displayName = "John Doe",
+                bio = "Software Engineer"
+            ),
+            isOwnProfile = true,
+            stats = UserStats(
+                postCount = 10,
+                followersCount = 100,
+                followingCount = 50,
+                workoutCount = 20
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        )
+    }
 }

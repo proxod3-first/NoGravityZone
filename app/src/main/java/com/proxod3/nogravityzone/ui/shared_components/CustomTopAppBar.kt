@@ -114,10 +114,9 @@ fun PreviewCustomTopAppBar() {
             title = "Top App Bar",
             navigationIcon = Icons.Filled.Menu,
             onNavigationClick = { /* Handle navigation click */ },
-                  )
+        )
     }
 }
-
 
 
 @Preview
@@ -130,7 +129,7 @@ fun PreviewCustomTopAppBar2() {
             actionIcons = listOf(Icons.Filled.Save),
             onActionClicks = listOf { /* Handle action click */ },
 
-        )
+            )
     }
 }
 
@@ -144,6 +143,6 @@ fun PreviewCustomTopAppBar3() {
             actionDrawables = listOf(R.drawable.save_outlined),
             onActionClicks = listOf { /* Handle action click */ },
 
-        )
+            )
     }
 }

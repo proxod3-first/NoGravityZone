@@ -36,7 +36,12 @@ fun HashtagOutlinedTextField(
             val words = text.text.split("\\s+".toRegex())
             words.forEachIndexed { index, word ->
                 if (word.startsWith("#") && word.length > 1) {
-                    withStyle(SpanStyle(color = hashtagColor, textDecoration = TextDecoration.None)) {
+                    withStyle(
+                        SpanStyle(
+                            color = hashtagColor,
+                            textDecoration = TextDecoration.None
+                        )
+                    ) {
                         append(word)
                     }
                 } else {
@@ -55,8 +60,7 @@ fun HashtagOutlinedTextField(
         keyboardOptions = keyboardOptions,
         minLines = minLines,
         modifier = modifier
-            .fillMaxWidth()
-           ,
+            .fillMaxWidth(),
         placeholder = {
             Text(
                 stringResource(R.string.what_s_on_your_mind),

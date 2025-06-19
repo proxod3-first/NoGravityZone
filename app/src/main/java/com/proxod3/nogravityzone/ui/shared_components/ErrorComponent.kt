@@ -50,7 +50,6 @@ sealed interface ErrorIcon {
 /**
  * A composable function to display an error message with an icon.
  *
- * @param error the error message.
  * @param icon the icon to display. If not provided, a default error icon is used.
  * @param modifier the modifier to use for the error component.
  * @param onRetryClick an optional lambda to invoke when the retry button is clicked.
@@ -78,6 +77,7 @@ fun ErrorComponent(
                     colorFilter = ColorFilter.tint(LocalContentColor.current) // Apply tint
                 )
             }
+
             is ErrorIcon.VectorIcon -> {
                 Icon(
                     imageVector = icon.imageVector,
