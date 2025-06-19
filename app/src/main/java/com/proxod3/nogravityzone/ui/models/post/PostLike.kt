@@ -1,7 +1,6 @@
 package com.proxod3.nogravityzone.ui.models.post
 
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.FieldValue
 
 
 /**

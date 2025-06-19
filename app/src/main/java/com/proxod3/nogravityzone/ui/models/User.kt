@@ -16,7 +16,7 @@ data class User(
     val lastActive: Timestamp? = null,
     val stats: UserStats = UserStats(),
     val settings: UserSettings = UserSettings()
-){
+) {
     companion object {
         const val USERS_COLLECTION = "users"
         const val USER_STATS = "stats"
