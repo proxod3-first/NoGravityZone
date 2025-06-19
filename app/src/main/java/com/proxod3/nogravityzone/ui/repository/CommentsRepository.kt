@@ -5,13 +5,12 @@ import android.util.Log
 import com.proxod3.nogravityzone.ui.models.comment.CommentLike
 import com.proxod3.nogravityzone.ui.models.post.FeedPost
 import com.proxod3.nogravityzone.ui.models.post.PostMetrics
-import com.proxod3.nogravityzone.ui.room.AppDatabase
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import com.google.firebase.firestore.FieldValue
+
 interface ICommentsRepository {
     suspend fun deleteComment(comment: Comment): ResultWrapper<Unit>
     suspend fun getPostComments(postId: String): ResultWrapper<List<Comment>>
@@ -32,7 +31,10 @@ class CommentsRepository @Inject constructor(
             // Query comments collection where postId matches
             val querySnapshot = commentsCollection
                 .whereEqualTo(Comment.POST_ID_FIELD, postId)
-                .orderBy(Comment.TIMESTAMP_FIELD, Query.Direction.DESCENDING) // Order by timestamp, newest first
+                .orderBy(
+                    Comment.TIMESTAMP_FIELD,
+                    Query.Direction.DESCENDING
+                ) // Order by timestamp, newest first
                 .get()
                 .await()
 
@@ -41,7 +43,11 @@ class CommentsRepository @Inject constructor(
                 try {
                     document.toObject(Comment::class.java)
                 } catch (e: Exception) {
-                    Log.e("CommentsRepository", "Error converting document ${document.id} to Comment", e)
+                    Log.e(
+                        "CommentsRepository",
+                        "Error converting document ${document.id} to Comment",
+                        e
+                    )
                     null // Skip invalid documents
                 }
             }
@@ -73,10 +79,11 @@ class CommentsRepository @Inject constructor(
             batch.set(commentDocRef, commentToSave)
 
             // b) Increment the post's comment count using dot notation for nested field
-            val postMetricsCommentsPath = "${FeedPost.POST_METRICS}.${PostMetrics.POST_METRICS_COMMENTS}"
+            val postMetricsCommentsPath =
+                "${FeedPost.POST_METRICS}.${PostMetrics.POST_METRICS_COMMENTS}"
             batch.update(postDocRef, postMetricsCommentsPath, FieldValue.increment(1))
 
-            // Commit the batch
+            // c) Commit the batch
             batch.commit().await()
             Log.d("CommentsRepository", "Comment ${comment.id} added successfully.")
             ResultWrapper.Success(Unit)
@@ -116,15 +123,22 @@ class CommentsRepository @Inject constructor(
             likeDocRefsToDelete.forEach { likeRef ->
                 batch.delete(likeRef)
             }
-            Log.d("CommentsRepository", "Prepared batch to delete ${likeDocRefsToDelete.size} likes for comment ${comment.id}")
+            Log.d(
+                "CommentsRepository",
+                "Prepared batch to delete ${likeDocRefsToDelete.size} likes for comment ${comment.id}"
+            )
 
             // c) Decrement the post's comment count
-            val postMetricsCommentsPath = "${FeedPost.POST_METRICS}.${PostMetrics.POST_METRICS_COMMENTS}"
+            val postMetricsCommentsPath =
+                "${FeedPost.POST_METRICS}.${PostMetrics.POST_METRICS_COMMENTS}"
             batch.update(postDocRef, postMetricsCommentsPath, FieldValue.increment(-1))
 
             // 4. Commit the batch
             batch.commit().await()
-            Log.d("CommentsRepository", "Comment ${comment.id} and associated data deleted successfully.")
+            Log.d(
+                "CommentsRepository",
+                "Comment ${comment.id} and associated data deleted successfully."
+            )
             ResultWrapper.Success(Unit)
 
         } catch (e: Exception) {
@@ -132,8 +146,4 @@ class CommentsRepository @Inject constructor(
             ResultWrapper.Error(e)
         }
     }
-
-
-
-
 }
