@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -87,7 +87,7 @@ private fun WorkoutListItem(
 
         // Workout description or details
         Text(
-            text = workoutWithStatus.workout.description ?: "No description",
+            text = workoutWithStatus.workout.description,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(bottom = 8.dp)
@@ -120,7 +120,7 @@ private fun WorkoutListItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    imageVector = Icons.Default.List,
+                    imageVector = Icons.AutoMirrored.Filled.List,
                     contentDescription = "Exercises",
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(16.dp)

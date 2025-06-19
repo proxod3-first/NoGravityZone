@@ -11,8 +11,8 @@ import com.github.marlonlom.utilities.timeago.TimeAgo
 import com.github.marlonlom.utilities.timeago.TimeAgoMessages
 import kotlin.random.Random
 
-object Utils {
 
+object Utils {
 
     fun isValidEmail(email: String): Boolean {
         return (!TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email)
@@ -44,16 +44,6 @@ object Utils {
         return "$color$word$number"
     }
 
-    //TimeAgo library
-    @Composable
-    fun formatRelativeTime(timestamp: Long): String {
-        val currentLocale = LocalContext.current.resources.configuration.locales[0]
-        val timeAgoMessages = remember(currentLocale) {
-            TimeAgoMessages.Builder().withLocale(currentLocale).build()
-        }
-        return TimeAgo.using(timestamp, timeAgoMessages)
-    }
-
     // TimeAgo library for Firestore Timestamp
     @Composable
     fun formatRelativeTimeFromFireStoreTimeStamp(timestamp: com.google.firebase.Timestamp): String {
@@ -65,10 +55,10 @@ object Utils {
     }
 
     //generate random id
-     fun generateRandomId(prefix:String): String {
-            val chars = ('a'..'z') + ('A'..'Z') + ('0'..'9')
-            val randomString = (1..10).map { chars.random() }.joinToString("")
-        return  "$prefix _$randomString"
+    fun generateRandomId(prefix: String): String {
+        val chars = ('a'..'z') + ('A'..'Z') + ('0'..'9')
+        val randomString = (1..10).map { chars.random() }.joinToString("")
+        return "$prefix _$randomString"
     }
 
     //show toast
@@ -81,11 +71,10 @@ object Utils {
     }
 
 
-     fun extractHashtags(content: String): List<String> {
+    fun extractHashtags(content: String): List<String> {
         return content.split("\\s+".toRegex())
             .filter { it.startsWith("#") && it.length > 1 }
             .map { it.substring(1) } // Remove the # symbol
             .distinct() // Remove duplicates
     }
-
 }

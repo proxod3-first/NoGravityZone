@@ -39,7 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.proxod3.nogravityzone.R
 import com.proxod3.nogravityzone.ui.AppTheme
 import com.proxod3.nogravityzone.ui.models.Exercise
@@ -82,7 +82,7 @@ fun ExerciseInWorkoutListItem(
             // If an imageBitmap is provided, use it. Otherwise, show placeholder
             if (workoutExercise.exercise?.screenshotPath != null) {
                 Image(
-                    painter = rememberImagePainter(data = workoutExercise.exercise.screenshotPath),
+                    painter = rememberAsyncImagePainter(model = workoutExercise.exercise.screenshotPath),
                     contentDescription = null,
                     modifier = Modifier.size(56.dp)
                 )

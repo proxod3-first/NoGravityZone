@@ -14,4 +14,7 @@
 .cxx
 local.properties
 app/src/main/java/com/proxod3/nogravityzone/ui/retrofit/Secrets.kt
+
+# Google Services (Firebase)
 google-services.json
+google-services*.json

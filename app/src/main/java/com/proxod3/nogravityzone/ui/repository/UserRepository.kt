@@ -2,7 +2,6 @@ package com.proxod3.nogravityzone.ui.repository
 
 import UserDisplayInfo
 import android.util.Log
-import com.proxod3.nogravityzone.R
 import com.proxod3.nogravityzone.ui.models.User
 import com.proxod3.nogravityzone.ui.models.User.Companion.PROFILE_PICTURE_URL
 import com.proxod3.nogravityzone.ui.models.User.Companion.USERS_COLLECTION
@@ -149,11 +148,11 @@ class UserRepository @Inject constructor(
                         trySend(ResultWrapper.Success(user))
                     } else {
                         Log.e("UserRepository", "Failed converting user snapshot ${snapshot.id}")
-                        trySend(ResultWrapper.Error(CustomException(R.string.error_parsing_user_data)))
+                        trySend(ResultWrapper.Error(CustomException()))
                     }
                 } else {
                     // Document doesn't exist or snapshot is null
-                    trySend(ResultWrapper.Error(CustomException(R.string.user_not_found)))
+                    trySend(ResultWrapper.Error(CustomException()))
                 }
             }
         } catch (e: Exception) {

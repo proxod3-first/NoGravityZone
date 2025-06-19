@@ -18,22 +18,22 @@ interface ExerciseDao {
     suspend fun insertAll(exercises: List<Exercise>)
 
     @Query("SELECT * FROM exercise WHERE equipment LIKE :type")
-    abstract fun getExercisesByEquipment(type: String): List<Exercise>?
+    fun getExercisesByEquipment(type: String): List<Exercise>?
 
     @Query("SELECT * FROM exercise WHERE target LIKE :target")
-    abstract fun getExercisesByTarget(target: String): List<Exercise>?
+    fun getExercisesByTarget(target: String): List<Exercise>?
 
     @Query("SELECT * FROM exercise WHERE name LIKE :name")
-    abstract fun getExercisesByName(name: String): List<Exercise>?
+    fun getExercisesByName(name: String): List<Exercise>?
 
     @Query("SELECT * FROM exercise WHERE id LIKE :id")
-    abstract fun getExerciseById(id: String): Exercise?
+    fun getExerciseById(id: String): Exercise?
 
     @Query("SELECT * FROM exercise WHERE id LIKE :id")
-    abstract fun observeExerciseById(id: String): Flow<Exercise?>
+    fun observeExerciseById(id: String): Flow<Exercise?>
 
     @Query("SELECT * FROM exercise WHERE bodyPart LIKE :bodyPart")
-    abstract fun getExercisesByBodyPart(bodyPart: String): List<Exercise>?
+    fun getExercisesByBodyPart(bodyPart: String): List<Exercise>?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(exercise: Exercise)
@@ -42,7 +42,7 @@ interface ExerciseDao {
     suspend fun update(exercise: Exercise)
 
     @Query("SELECT * FROM exercise WHERE isSavedLocally = 1")
-    abstract fun observeSavedExercises(): Flow<List<Exercise>?>
+    fun observeSavedExercises(): Flow<List<Exercise>?>
 
     /**
      * Fetches a specific page of exercises.
@@ -51,5 +51,4 @@ interface ExerciseDao {
      */
     @Query("SELECT * FROM exercise ORDER BY id ASC LIMIT :limit OFFSET :offset") // Order by ID for consistency
     suspend fun getExercisesPage(limit: Int, offset: Int): List<Exercise>
-
 }

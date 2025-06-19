@@ -18,7 +18,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -52,7 +52,6 @@ import com.proxod3.nogravityzone.ui.screens.feed.composables.UserInfoRow
 import com.proxod3.nogravityzone.ui.shared_components.CenteredText
 import com.proxod3.nogravityzone.ui.shared_components.HashtagText
 import com.proxod3.nogravityzone.ui.shared_components.PostInteractionRow
-import com.proxod3.nogravityzone.utils.Utils.formatRelativeTime
 import com.proxod3.nogravityzone.utils.Utils.formatRelativeTimeFromFireStoreTimeStamp
 import com.google.firebase.Timestamp
 import java.util.UUID
@@ -114,88 +113,89 @@ fun PostDetailsSection(
     onPostClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-        Column(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-                .clickable { onPostClick() }
-        ) {
-            UserInfoRow(
-                feedPostWithLikesAndComments.post.postCreator.displayName,
-                feedPostWithLikesAndComments.post.postCreator.profilePictureUrl,
-                formatRelativeTimeFromFireStoreTimeStamp(feedPostWithLikesAndComments.post.createdAt),
-                onProfileClick = onProfileClick
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .clickable { onPostClick() }
+    ) {
+        UserInfoRow(
+            feedPostWithLikesAndComments.post.postCreator.displayName,
+            feedPostWithLikesAndComments.post.postCreator.profilePictureUrl,
+            formatRelativeTimeFromFireStoreTimeStamp(feedPostWithLikesAndComments.post.createdAt),
+            onProfileClick = onProfileClick
+        )
+
+        HashtagText(
+            text = feedPostWithLikesAndComments.post.content,
+            onHashtagClick = {}, // TODO: Add hashtag click handler
+            modifier = Modifier.padding(vertical = 4.dp),
+            style = MaterialTheme.typography.titleLarge.copy(
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 0.5.sp
             )
+        )
 
-            HashtagText(
-                text = feedPostWithLikesAndComments.post.content,
-                onHashtagClick = {}, // TODO: Add hashtag click handler
-                modifier = Modifier.padding(vertical = 4.dp),
-                style = MaterialTheme.typography.titleLarge.copy(
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 0.5.sp
-                )
-            )
+        if (feedPostWithLikesAndComments.post.imageUrlList.isNotEmpty()) {
+            val imageUrls = feedPostWithLikesAndComments.post.imageUrlList.take(4)
 
-            if (feedPostWithLikesAndComments.post.imageUrlList.isNotEmpty()) {
-                val imageUrls = feedPostWithLikesAndComments.post.imageUrlList.take(4)
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 4.dp)
-                ) {
-                    when (imageUrls.size) {
-                        1 -> {
-                            // Single image takes full width
-                            AsyncImage(
-                                model = ImageRequest.Builder(LocalContext.current)
-                                    .data(imageUrls[0])
-                                    .crossfade(true)
-                                    .build(),
-                                contentDescription = "Post Image 1",
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .aspectRatio(1.5f)
-                                    .clip(RoundedCornerShape(8.dp))
-                                    .shimmerPlaceholder(
-                                        visible = true,
-                                        shimmerTheme = LocalShimmerTheme.current,
-                                    )
-                            )
-                        }
-                        else -> {
-                            ImageGrid(
-                                imageUrls = imageUrls,
-                                modifier = Modifier.padding(16.dp)
-                            )
-                        }
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)
+            ) {
+                when (imageUrls.size) {
+                    1 -> {
+                        // Single image takes full width
+                        AsyncImage(
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(imageUrls[0])
+                                .crossfade(true)
+                                .build(),
+                            contentDescription = "Post Image 1",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .aspectRatio(1.5f)
+                                .clip(RoundedCornerShape(8.dp))
+                                .shimmerPlaceholder(
+                                    visible = true,
+                                    shimmerTheme = LocalShimmerTheme.current,
+                                )
+                        )
                     }
-                }
 
-                if (feedPostWithLikesAndComments.post.imageUrlList.size > 4) {
-                    Text(
-                        text = "+${feedPostWithLikesAndComments.post.imageUrlList.size - 4} more",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
+                    else -> {
+                        ImageGrid(
+                            imageUrls = imageUrls,
+                            modifier = Modifier.padding(16.dp)
+                        )
+                    }
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            PostInteractionRow(
-                likeAmount = feedPostWithLikesAndComments.post.postMetrics.likes,
-                onLikeClick = onLikeIconClick,
-                isLiked = feedPostWithLikesAndComments.isLiked,
-                feedPostWithLikesAndComments.post.postMetrics.comments,
-                onCommentClick = onPostClick, //when comment icon is clicked show post details
-            )
-
+            if (feedPostWithLikesAndComments.post.imageUrlList.size > 4) {
+                Text(
+                    text = "+${feedPostWithLikesAndComments.post.imageUrlList.size - 4} more",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+            }
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        PostInteractionRow(
+            likeAmount = feedPostWithLikesAndComments.post.postMetrics.likes,
+            onLikeClick = onLikeIconClick,
+            isLiked = feedPostWithLikesAndComments.isLiked,
+            feedPostWithLikesAndComments.post.postMetrics.comments,
+            onCommentClick = onPostClick, //when comment icon is clicked show post details
+        )
+
     }
+}
 
 @Composable
 fun PostCommentSection(
@@ -249,7 +249,7 @@ private fun CommentInputComponent(
             singleLine = false,
             maxLines = 3,
 
-        )
+            )
 
         // Submit Button
         IconButton(
@@ -262,7 +262,7 @@ private fun CommentInputComponent(
             modifier = Modifier.size(48.dp)
         ) {
             Icon(
-                imageVector = Icons.Default.Send,
+                imageVector = Icons.AutoMirrored.Filled.Send,
                 contentDescription = "Submit Comment",
             )
         }
@@ -274,7 +274,7 @@ private fun CommentInputComponent(
 @Composable
 fun DetailedPostItemWithCommentsPreview() {
 
-    val commentList =List(5) {
+    val commentList = List(5) {
         CommentWithLikeStatus(
             Comment(
                 id = UUID.randomUUID().toString(),
@@ -293,32 +293,30 @@ fun DetailedPostItemWithCommentsPreview() {
 
 
     AppTheme {
-
-
         DetailedPostContent(
-        feedPostWithLikesAndComments = FeedPostWithLikesAndComments(
-            post = FeedPost(
-                content = "This is a post content",
-                postCreator = PostCreator(
-                    displayName = "John Doe",
-                    profilePictureUrl = "https://www.example.com/profile.jpg"
+            feedPostWithLikesAndComments = FeedPostWithLikesAndComments(
+                post = FeedPost(
+                    content = "This is a post content",
+                    postCreator = PostCreator(
+                        displayName = "John Doe",
+                        profilePictureUrl = "https://www.example.com/profile.jpg"
+                    ),
+                    createdAt = Timestamp.now(),
+                    imageUrlList = emptyList(),
+                    postMetrics = PostMetrics(
+                        likes = 100,
+                        comments = 10
+                    )
                 ),
-                createdAt = Timestamp.now(),
-                imageUrlList = emptyList(),
-                postMetrics = PostMetrics(
-                    likes = 100,
-                    comments = 10
-                )
+                isLiked = false,
+                commentList = commentList
             ),
-            isLiked = false,
-            commentList = commentList
-        ),
-        onProfileClick = { },
-        onCommentSubmit = {},
-        isLoadingComments = false,
-        onPostLikeClick = {},
-        onCommentLikeClick = {},
-    )
+            onProfileClick = { },
+            onCommentSubmit = {},
+            isLoadingComments = false,
+            onPostLikeClick = {},
+            onCommentLikeClick = {},
+        )
     }
 
 }
@@ -328,30 +326,30 @@ fun DetailedPostItemWithCommentsPreview() {
 fun DetailedPostContentPreview() {
 
     AppTheme {
-    DetailedPostContent(
-        feedPostWithLikesAndComments = FeedPostWithLikesAndComments(
-            post = FeedPost(
-                content = "This is a post content",
-                postCreator = PostCreator(
-                    displayName = "John Doe",
-                    profilePictureUrl = "https://www.example.com/profile.jpg"
+        DetailedPostContent(
+            feedPostWithLikesAndComments = FeedPostWithLikesAndComments(
+                post = FeedPost(
+                    content = "This is a post content",
+                    postCreator = PostCreator(
+                        displayName = "John Doe",
+                        profilePictureUrl = "https://www.example.com/profile.jpg"
+                    ),
+                    createdAt = Timestamp.now(),
+                    imageUrlList = emptyList(),
+                    postMetrics = PostMetrics(
+                        likes = 100,
+                        comments = 10
+                    )
                 ),
-                createdAt = Timestamp.now(),
-                imageUrlList = emptyList(),
-                postMetrics = PostMetrics(
-                    likes = 100,
-                    comments = 10
-                )
+                isLiked = false,
+                commentList = emptyList()
             ),
-            isLiked = false,
-            commentList = emptyList()
-        ),
-        onProfileClick = { },
-        onCommentSubmit = {},
-        isLoadingComments = false,
-        onPostLikeClick = {},
-        onCommentLikeClick = {},
-    )
-}
+            onProfileClick = { },
+            onCommentSubmit = {},
+            isLoadingComments = false,
+            onPostLikeClick = {},
+            onCommentLikeClick = {},
+        )
+    }
 }
 

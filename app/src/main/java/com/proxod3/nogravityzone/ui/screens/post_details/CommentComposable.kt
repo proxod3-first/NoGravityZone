@@ -26,7 +26,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.proxod3.nogravityzone.ui.shared_components.ProfileImageSmall
-import com.proxod3.nogravityzone.utils.Utils.formatRelativeTime
 import com.proxod3.nogravityzone.utils.Utils.formatRelativeTimeFromFireStoreTimeStamp
 import com.google.firebase.Timestamp
 
@@ -36,9 +35,6 @@ fun CommentComposable(
     onCommentLikeClick: (commentId: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-
-
-
     Surface(
         modifier = modifier
             .fillMaxWidth(),
@@ -105,10 +101,11 @@ fun CommentComposable(
 
 
                 // Like button and count with animations
-                    AnimatedLikeCounter(isLiked = commentWithLikeStatus.isLiked,
-                        count = commentWithLikeStatus.comment.likesCount,
-                        onLikeClick = {onCommentLikeClick(commentWithLikeStatus.comment.id)},
-                    )
+                AnimatedLikeCounter(
+                    isLiked = commentWithLikeStatus.isLiked,
+                    count = commentWithLikeStatus.comment.likesCount,
+                    onLikeClick = { onCommentLikeClick(commentWithLikeStatus.comment.id) },
+                )
 
             }
         }

@@ -225,8 +225,7 @@ private fun WorkoutList(
                     onWorkoutSave = onWorkoutSave,
                     onWorkoutClick = onWorkoutClick,
                 ),
-                modifier = Modifier
-                    .animateItemPlacement()
+                modifier = Modifier.animateItem(fadeInSpec = null, fadeOutSpec = null)
                     .padding(horizontal = 16.dp)
                     .clip(RoundedCornerShape(12.dp))
                     .background(MaterialTheme.colorScheme.surface)
@@ -294,7 +293,6 @@ private fun SearchBar(
     onOptionSelected: (String) -> Unit,
     shape: RoundedCornerShape,
     colors: SearchBarColors
-
 ) {
     Row(
         modifier = modifier, verticalAlignment = Alignment.CenterVertically
@@ -311,7 +309,6 @@ private fun SearchBar(
         Spacer(modifier = Modifier.width(8.dp))
         FilterMenu(
             options = filterOptionList,
-            selectedOption = selectedFilterOption,
             onOptionSelected = onOptionSelected
         )
     }
@@ -320,7 +317,7 @@ private fun SearchBar(
 
 @Composable
 fun FilterMenu(
-    options: List<String>, selectedOption: String, onOptionSelected: (String) -> Unit
+    options: List<String>, onOptionSelected: (String) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
 
