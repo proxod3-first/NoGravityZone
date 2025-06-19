@@ -4,7 +4,6 @@ package com.proxod3.nogravityzone.ui.screens.feed.composables
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -41,7 +40,6 @@ import com.proxod3.nogravityzone.utils.Utils.formatRelativeTimeFromFireStoreTime
 import com.google.firebase.Timestamp
 
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun FeedPostItem(
     feedPostWithLikesAndComments: FeedPostWithLikesAndComments,
@@ -100,6 +98,7 @@ fun FeedPostItem(
                                 )
                         )
                     }
+
                     else -> {
                         ImageGrid(
                             imageUrls = imageUrls,
@@ -217,15 +216,20 @@ private fun ImageItem(
 }
 
 @Composable
-fun UserInfoRow(name: String?, imageUrl: String?, timeAgo: String, onProfileClick: () -> Unit = {}) {
+fun UserInfoRow(
+    name: String?,
+    imageUrl: String?,
+    timeAgo: String,
+    onProfileClick: () -> Unit = {}
+) {
     Row(verticalAlignment = Alignment.CenterVertically) {
 
-        ProfileImageSmall(imageUrl,onClick=onProfileClick)
+        ProfileImageSmall(imageUrl, onClick = onProfileClick)
         Spacer(modifier = Modifier.width(8.dp))
 
         Column {
             Text(
-                text = name?:"Unknown",
+                text = name ?: "Unknown",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.clickable { onProfileClick() }

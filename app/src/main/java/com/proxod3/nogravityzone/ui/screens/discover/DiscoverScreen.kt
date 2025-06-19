@@ -26,26 +26,23 @@ import com.proxod3.nogravityzone.ui.shared_components.CustomTopAppBar
 import com.proxod3.nogravityzone.ui.shared_components.ErrorComponent
 import com.proxod3.nogravityzone.ui.shared_components.LoadingIndicator
 
+
 @Composable
 fun DiscoverScreen(navigateToProfile: (String?) -> Unit) {
-
-
 
     val viewModel: DiscoverViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsState()
     val discoverData by viewModel.discoverData.collectAsState()
 
-
-    DiscoverUserList( discoverData, uiState, onAction = {action -> when (action) {
-        is DiscoverScreenAction.NavigateToProfile -> navigateToProfile(action.userId)
-        is DiscoverScreenAction.UpdateSearchQuery -> viewModel.onSearchQueryChanged(action.searchQuery)
-        is DiscoverScreenAction.ToggleFollowUser -> viewModel.followUnfollowUser(action.user)
-        is DiscoverScreenAction.Refresh -> viewModel.refresh()
-    }
+    DiscoverUserList(discoverData, uiState, onAction = { action ->
+        when (action) {
+            is DiscoverScreenAction.NavigateToProfile -> navigateToProfile(action.userId)
+            is DiscoverScreenAction.UpdateSearchQuery -> viewModel.onSearchQueryChanged(action.searchQuery)
+            is DiscoverScreenAction.ToggleFollowUser -> viewModel.followUnfollowUser(action.user)
+            is DiscoverScreenAction.Refresh -> viewModel.refresh()
+        }
     })
-
 }
-
 
 @Composable
 private fun DiscoverUserList(
@@ -54,14 +51,16 @@ private fun DiscoverUserList(
     onAction: (DiscoverScreenAction) -> Unit
 ) {
     Column(
-        modifier = Modifier.fillMaxSize().systemBarsPadding(),
+        modifier = Modifier
+            .fillMaxSize()
+            .systemBarsPadding(),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         CustomTopAppBar(
             title = stringResource(R.string.discover),
             actionIcons = listOf(Icons.Default.Refresh),
             onActionClicks = listOf { onAction(DiscoverScreenAction.Refresh) },
-                   )
+        )
 
         CustomSearchBar(
             hint = stringResource(id = R.string.search_for_a_user),
@@ -84,7 +83,8 @@ private fun DiscoverUserList(
                 is DiscoverUiState.Success -> {
                     DiscoverUserList(
                         discoverData,
-                        onAction = onAction,)
+                        onAction = onAction,
+                    )
                 }
 
                 is DiscoverUiState.Error.StringError -> ErrorComponent(
@@ -95,7 +95,6 @@ private fun DiscoverUserList(
 
     }
 }
-
 
 
 @Preview(showBackground = true)
@@ -144,10 +143,16 @@ private fun DiscoverUserList(
                 user = userWithFollowState.user,
                 onFollowClick = { onAction(DiscoverScreenAction.ToggleFollowUser(userWithFollowState.user)) },
                 isFollowedByLocalUser = userWithFollowState.isFollowing,
-                onProfileClick = { onAction(DiscoverScreenAction.NavigateToProfile(userWithFollowState.user.id)) }
+                onProfileClick = {
+                    onAction(
+                        DiscoverScreenAction.NavigateToProfile(
+                            userWithFollowState.user.id
+                        )
+                    )
+                }
             )
             if (discoverData.users.last() != userWithFollowState)
-            HorizontalDivider()
+                HorizontalDivider()
         }
     }
 }

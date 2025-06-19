@@ -27,121 +27,120 @@ import com.proxod3.nogravityzone.ui.shared_components.CustomButton
 import com.proxod3.nogravityzone.ui.shared_components.ExpandableSection
 import com.proxod3.nogravityzone.ui.shared_components.ProfileHeader
 
+
 @Composable
 internal fun CurrentUserProfileContent(
     uiData: ProfileUiData,
     onAction: (ProfileScreenAction) -> Unit
 ) {
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                ,
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp)
-        ) {
-            // Profile Header
-            item {
-                ProfileHeader(
-                    user = uiData.user,
-                    stats = uiData.user.stats,
-                    isOwnProfile = true,
-                    onEditProfilePicture = { onAction(ProfileScreenAction.NavigateToEditProfile(it)) },
-                    modifier = Modifier
-                        .fillMaxWidth()
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp)
+    ) {
+        // Profile Header
+        item {
+            ProfileHeader(
+                user = uiData.user,
+                stats = uiData.user.stats,
+                isOwnProfile = true,
+                onEditProfilePicture = { onAction(ProfileScreenAction.NavigateToEditProfile(it)) },
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+        }
+        // Action Buttons
+        item {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                CustomButton(
+                    onClick = { onAction(ProfileScreenAction.NavigateToWorkoutSetup) },
+                    modifier = Modifier.weight(1f),
+                    icon = Icons.Default.Add,
+                    text = "Create Workout"
                 )
-            }
-            // Action Buttons
-            item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    CustomButton(
-                        onClick = { onAction(ProfileScreenAction.NavigateToWorkoutSetup) },
-                        modifier = Modifier.weight(1f),
-                        icon = Icons.Default.Add,
-                        text = "Create Workout"
-                    )
-
-                    CustomButton(
-                        onClick = { /* TODO: Navigate to edit profile */ },
-                        modifier = Modifier.weight(1f),
-                        icon = Icons.Default.Edit,
-                        text = "Edit Profile"
-                    )
-                }
 
                 CustomButton(
-                    onClick = { onAction(ProfileScreenAction.Logout) },
-                    icon = Icons.AutoMirrored.Filled.Logout,
-                    text = "Logout"
-                )
-
-            }
-
-            // Posts Section
-            item {
-                ExpandableSection(
-                    header = "Posts",
-                    content = {
-                        ProfilePostsListComponent(
-                            posts = uiData.posts,
-                            onPostClick = { /* TODO: Handle post click */ },
-                            onCreatePost = { onAction(ProfileScreenAction.NavigateToCreatePost) },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .heightIn(max = 300.dp),
-                            isOwnProfile = uiData.isOwnProfile
-                        )
-                    }
+                    onClick = { /* TODO: Navigate to edit profile */ },
+                    modifier = Modifier.weight(1f),
+                    icon = Icons.Default.Edit,
+                    text = "Edit Profile"
                 )
             }
 
-            // Saved Workouts Section
-            item {
-                ExpandableSection(
-                    header = "Saved Workouts",
-                    content = {
-                        ProfileWorkoutListComponent(
-                            workouts = uiData.workoutWithStatusList,
-                            onAddWorkoutClick = { onAction(ProfileScreenAction.NavigateToWorkoutSetup) },
-                            onWorkoutClick = {
-                                onAction(ProfileScreenAction.NavigateToWorkoutDetails(it))
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .heightIn(max = 300.dp),
-                            isOwnProfile = uiData.isOwnProfile
-                        )
-                    }
-                )
-            }
+            CustomButton(
+                onClick = { onAction(ProfileScreenAction.Logout) },
+                icon = Icons.AutoMirrored.Filled.Logout,
+                text = "Logout"
+            )
 
-            // Saved Exercises Section
-            item {
-                ExpandableSection(
-                    header = "Saved Exercises",
-                    content = {
-                        ProfileExerciseListComponent(
-                            exerciseList = uiData.exerciseList,
-                            onExploreExercisesClick = { onAction(ProfileScreenAction.NavigateToExercisesList) },
-                            onExerciseClick = {
-                                onAction(ProfileScreenAction.NavigateToExerciseDetails(it))
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .heightIn(max = 300.dp),
-                            isOwnProfile = uiData.isOwnProfile
-                        )
-                    }
-                )
-            }
         }
-}
 
+        // Posts Section
+        item {
+            ExpandableSection(
+                header = "Posts",
+                content = {
+                    ProfilePostsListComponent(
+                        posts = uiData.posts,
+                        onPostClick = { /* TODO: Handle post click */ },
+                        onCreatePost = { onAction(ProfileScreenAction.NavigateToCreatePost) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(max = 300.dp),
+                        isOwnProfile = uiData.isOwnProfile
+                    )
+                }
+            )
+        }
+
+        // Saved Workouts Section
+        item {
+            ExpandableSection(
+                header = "Saved Workouts",
+                content = {
+                    ProfileWorkoutListComponent(
+                        workouts = uiData.workoutWithStatusList,
+                        onAddWorkoutClick = { onAction(ProfileScreenAction.NavigateToWorkoutSetup) },
+                        onWorkoutClick = {
+                            onAction(ProfileScreenAction.NavigateToWorkoutDetails(it))
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(max = 300.dp),
+                        isOwnProfile = uiData.isOwnProfile
+                    )
+                }
+            )
+        }
+
+        // Saved Exercises Section
+        item {
+            ExpandableSection(
+                header = "Saved Exercises",
+                content = {
+                    ProfileExerciseListComponent(
+                        exerciseList = uiData.exerciseList,
+                        onExploreExercisesClick = { onAction(ProfileScreenAction.NavigateToExercisesList) },
+                        onExerciseClick = {
+                            onAction(ProfileScreenAction.NavigateToExerciseDetails(it))
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(max = 300.dp),
+                        isOwnProfile = uiData.isOwnProfile
+                    )
+                }
+            )
+        }
+    }
+}
 
 
 @Preview(showBackground = true)

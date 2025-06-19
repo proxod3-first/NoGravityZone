@@ -449,7 +449,6 @@ private fun ExerciseDialogContent(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ExerciseNumberField(
     value: String,
@@ -480,8 +479,6 @@ private fun ExerciseNumberField(
     }
 }
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 fun WorkoutExerciseListScreenPreview() {

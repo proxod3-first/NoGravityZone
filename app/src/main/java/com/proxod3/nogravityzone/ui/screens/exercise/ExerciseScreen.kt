@@ -1,10 +1,10 @@
 package com.proxod3.nogravityzone.ui.screens.exercise
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -20,7 +20,8 @@ import com.proxod3.nogravityzone.ui.shared_components.ErrorComponent
 import com.proxod3.nogravityzone.ui.shared_components.LoadingIndicator
 import com.proxod3.nogravityzone.utils.MockData.sampleExercise
 
-@OptIn(ExperimentalMaterial3Api::class)
+
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun ExerciseScreen(exercise: Exercise, navigateBack: () -> Unit) {
 
@@ -32,10 +33,7 @@ fun ExerciseScreen(exercise: Exercise, navigateBack: () -> Unit) {
 
     val uiState by viewModel.uiState.collectAsState()
 
-
-    // Main Screen Content
-
-        ExerciseListContent(uiState, viewModel::toggleExerciseSave, navigateBack)
+    ExerciseListContent(uiState, viewModel::toggleExerciseSave, navigateBack)
 }
 
 
@@ -60,7 +58,7 @@ private fun ExerciseListContent(
             ),
             onActionClicks = listOf { onSaveExercise() },
 
-        )
+            )
 
         if (uiState.isLoading) {
             LoadingIndicator()

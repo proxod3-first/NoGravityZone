@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 @HiltViewModel
 class ExerciseViewModel @Inject constructor(
     private val exerciseRepository: IExerciseRepository
@@ -25,6 +26,7 @@ class ExerciseViewModel @Inject constructor(
     init {
         observeExerciseSaveState()
     }
+
     fun setExercise(exercise: Exercise) {
         _uiState.update {
             it.copy(
@@ -57,27 +59,26 @@ class ExerciseViewModel @Inject constructor(
             uiState.value.exercise?.let {
                 exerciseRepository.observeExercise(it.id).collect { result ->
                     result.onSuccess { exercise ->
-                            _uiState.update { currentUiState ->
-                                currentUiState.copy(
-                                    exercise = exercise,
-                                    isLoading = false
-                                )
-                            }
+                        _uiState.update { currentUiState ->
+                            currentUiState.copy(
+                                exercise = exercise,
+                                isLoading = false
+                            )
+                        }
                     }
-                    .onError {
-                        _uiState.update { it.copy(isLoading = false, error = it.error) }
-                    }
+                        .onError {
+                            _uiState.update { it.copy(isLoading = false, error = it.error) }
+                        }
+                }
             }
         }
+
     }
 
-}
 
-
-
-data class ExerciseUiState(
-    val isLoading: Boolean = true,
-    val error: String? = null,
-    val exercise: Exercise? = null,
-)
+    data class ExerciseUiState(
+        val isLoading: Boolean = true,
+        val error: String? = null,
+        val exercise: Exercise? = null,
+    )
 }

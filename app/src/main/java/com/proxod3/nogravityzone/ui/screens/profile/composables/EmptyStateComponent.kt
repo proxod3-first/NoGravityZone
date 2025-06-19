@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.proxod3.nogravityzone.ui.AppTheme
 import com.proxod3.nogravityzone.ui.screens.profile.EmptyStateActionType
 
+
 @Composable
 internal fun EmptyStateComponent(
     isOwnProfile: Boolean,

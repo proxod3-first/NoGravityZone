@@ -10,7 +10,6 @@ import com.proxod3.nogravityzone.ui.repository.ILikeRepository
 import com.proxod3.nogravityzone.ui.repository.ISocialRepository
 import com.proxod3.nogravityzone.ui.repository.IUserRepository
 import com.proxod3.nogravityzone.ui.repository.ResultWrapper
-import com.proxod3.nogravityzone.ui.repository.onError
 import com.proxod3.nogravityzone.ui.room.LikeType
 import com.proxod3.nogravityzone.ui.screens.post_details.FeedPostWithLikesAndComments
 import com.proxod3.nogravityzone.utils.UiText
@@ -23,7 +22,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-// todo create the feedgeneration cloud function to be automatically called when a post is created to
+
+// todo create the feed_generation cloud function to be automatically called when a post is created to
 // add it to the feed of the following users
 data class FeedUiData(
     val postList: List<FeedPostWithLikesAndComments> = emptyList(),
@@ -80,7 +80,12 @@ class FeedViewModel @Inject constructor(
                 _feedUiData.value.hasReachedEnd // Check if already at the end
             ) return@launch
 
-            _feedUiData.update { it.copy(isLoading = true, error = null) } // Set loading true for next page
+            _feedUiData.update {
+                it.copy(
+                    isLoading = true,
+                    error = null
+                )
+            } // Set loading true for next page
             // Pass false for isInitialLoad
             loadFeedPage(isInitialLoad = false)
         }
@@ -88,15 +93,9 @@ class FeedViewModel @Inject constructor(
 
 
     private suspend fun loadFeedPage(isInitialLoad: Boolean) {
-        // Set loading state based on whether it's initial load or pagination
-        /* _feedUiData.update {
-             if (isInitialLoad) it.copy(isLoading = true, error = null)
-             else it.copy(isLoading = true, error = null) // Keep isLoading true for pagination too
-         }*/
-
         try {
             val currentUserId = userRepository.getCurrentUserId()
-            var relevantUserIds: List<String>
+            val relevantUserIds: List<String>
 
             // Fetch followed users (only needed once or on refresh)
             // Avoid refetching if we already have them and are just paginating
@@ -106,12 +105,19 @@ class FeedViewModel @Inject constructor(
                         relevantUserIds = followingResult.data + currentUserId // Add current user
                         _feedUiData.update { it.copy(followingUserIds = relevantUserIds.toSet()) }
                     }
+
                     is ResultWrapper.Error -> {
                         throw followingResult.exception // Throw exception to be caught below
                     }
+
                     is ResultWrapper.Loading -> {
                         // Should ideally not happen with suspend fun, but handle defensively
-                        _feedUiData.update { it.copy(isLoading = false, error = UiText.String("Error: Unexpected loading state")) }
+                        _feedUiData.update {
+                            it.copy(
+                                isLoading = false,
+                                error = UiText.String("Error: Unexpected loading state")
+                            )
+                        }
                         return
                     }
                 }
@@ -143,7 +149,8 @@ class FeedViewModel @Inject constructor(
             when (result) {
                 is ResultWrapper.Success -> {
                     val newPosts = result.data
-                    val reachedEnd = newPosts.isEmpty() || newPosts.size < FeedRepository.PAGE_SIZE // Check if fewer posts than requested were returned
+                    val reachedEnd =
+                        newPosts.isEmpty() || newPosts.size < FeedRepository.PAGE_SIZE // Check if fewer posts than requested were returned
 
                     // Fetch like status for the newly fetched posts
                     val postsWithLikes = newPosts.map { post ->
@@ -153,21 +160,24 @@ class FeedViewModel @Inject constructor(
                             postId = null // postId not needed for POST type likes
                         )
                         // Handle potential error when fetching like status, default to false
-                        val isLiked = (isLikedResult as? ResultWrapper.Success<Boolean>)?.data ?: false
+                        val isLiked =
+                            (isLikedResult as? ResultWrapper.Success<Boolean>)?.data ?: false
                         FeedPostWithLikesAndComments(post = post, isLiked = isLiked)
                     }
 
                     // Update state: Append new posts or set initial list
                     _feedUiData.update { currentState ->
                         // Merge new posts with existing ones, ensuring no duplicates
-                        val existingPosts = if (isInitialLoad) emptyList() else currentState.postList
+                        val existingPosts =
+                            if (isInitialLoad) emptyList() else currentState.postList
                         val allPosts = (existingPosts + postsWithLikes)
                             .distinctBy { it.post.id } // Ensure uniqueness
 
                         currentState.copy(
                             postList = allPosts,
                             // Update pagination cursors with the last item from the *newly fetched* list
-                            lastLoadedPostTimestamp = newPosts.lastOrNull()?.createdAt ?: currentState.lastLoadedPostTimestamp,
+                            lastLoadedPostTimestamp = newPosts.lastOrNull()?.createdAt
+                                ?: currentState.lastLoadedPostTimestamp,
                             lastPostId = newPosts.lastOrNull()?.id ?: currentState.lastPostId,
                             isLoading = false, // Loading finished
                             isRefreshing = false, // Refreshing finished if it was a refresh
@@ -176,11 +186,14 @@ class FeedViewModel @Inject constructor(
                         )
                     }
                 }
+
                 is ResultWrapper.Error -> {
                     // Throw exception to be caught by the outer try-catch
                     throw result.exception
                 }
-                is ResultWrapper.Loading -> { /* Handled by initial isLoading update */ }
+
+                is ResultWrapper.Loading -> { /* Handled by initial isLoading update */
+                }
             }
         } catch (e: Exception) {
             Log.e("FeedViewModel", "Error loading feed page (isInitialLoad=$isInitialLoad)", e)
@@ -195,11 +208,14 @@ class FeedViewModel @Inject constructor(
     }
 
 
-
     fun toggleReaction(postId: String) {
         viewModelScope.launch {
-            val currentUserId = try { userRepository.getCurrentUserId() } catch (e: Exception) { null }
-            if(currentUserId == null) {
+            val currentUserId = try {
+                userRepository.getCurrentUserId()
+            } catch (e: Exception) {
+                null
+            }
+            if (currentUserId == null) {
                 _feedUiData.update { it.copy(error = UiText.StringResource(R.string.error_must_be_logged_in)) }
                 return@launch
             }
@@ -212,8 +228,10 @@ class FeedViewModel @Inject constructor(
             val isCurrentlyLiked = targetPostWithLikes.isLiked
             val newLikeStatus = !isCurrentlyLiked
             val currentLikeCount = targetPostWithLikes.post.postMetrics.likes
+
             // Determine new like count based on the action (like or unlike)
-            val newLikeCount = (if (newLikeStatus) currentLikeCount + 1 else currentLikeCount - 1).coerceAtLeast(0)
+            val newLikeCount =
+                (if (newLikeStatus) currentLikeCount + 1 else currentLikeCount - 1).coerceAtLeast(0)
 
             // Optimistically update the specific post in the list
             val optimisticList = originalList.toMutableList()
@@ -239,13 +257,12 @@ class FeedViewModel @Inject constructor(
                 _feedUiData.update { it.copy(postList = originalList) } // Revert to original list
                 _feedUiData.update { it.copy(error = UiText.StringResource(R.string.error_updating_reaction)) }
             }
-            // No else needed, UI is already updated optimistically
         }
     }
 
     fun refreshFeed() {
         viewModelScope.launch {
-            if (_feedUiData.value.isLoading || _feedUiData.value.isRefreshing ) return@launch
+            if (_feedUiData.value.isLoading || _feedUiData.value.isRefreshing) return@launch
             _feedUiData.update {
                 it.copy(
                     isRefreshing = true,
@@ -257,9 +274,6 @@ class FeedViewModel @Inject constructor(
                 )
             }
             loadFeedPage(isInitialLoad = true) // Load page 1 after setting refresh state
-            // The loadFeedPage function will set isRefreshing back to false on completion/error
         }
     }
-
-
 }

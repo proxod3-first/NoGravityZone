@@ -58,6 +58,7 @@ import com.proxod3.nogravityzone.utils.MockData.samplePostWithLikesAndCommentsLi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+
 @Composable
 fun FeedScreen(
     navigateToDetailedPost: (post: FeedPost, isLiked: Boolean) -> Unit,
@@ -122,7 +123,12 @@ private fun FeedScreenContent(
             } else if (feedUiData.error != null) {
                 ErrorMessage(feedUiData.error.asString()) { onAction(FeedScreenAction.RefreshFeed) }
             } else {
-                FeedPostListComposable(feedUiData.postList, onAction, feedUiData.isRefreshing,feedUiData.hasReachedEnd)
+                FeedPostListComposable(
+                    feedUiData.postList,
+                    onAction,
+                    feedUiData.isRefreshing,
+                    feedUiData.hasReachedEnd
+                )
             }
             Box(
                 modifier = Modifier
@@ -140,13 +146,14 @@ private fun FeedScreenContent(
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun FeedPostListComposable(
     postList: List<FeedPostWithLikesAndComments>,
     onAction: (FeedScreenAction) -> Unit,
     isRefreshing: Boolean,
-    hasReachedEnd:Boolean, //no more posts to load
+    hasReachedEnd: Boolean, //no more posts to load
     modifier: Modifier = Modifier
 ) {
     // Track list state
@@ -192,7 +199,7 @@ private fun FeedPostListComposable(
         isRefreshing = isRefreshing,
         onRefresh = { onAction(FeedScreenAction.RefreshFeed) },
         modifier = modifier.fillMaxSize(),
-        state =pullToRefreshState,
+        state = pullToRefreshState,
         indicator = {
             Indicator(
                 modifier = Modifier.align(Alignment.TopCenter),

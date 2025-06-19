@@ -1,7 +1,6 @@
 package com.proxod3.nogravityzone.ui.screens.exercise_list
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -20,7 +19,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
@@ -52,7 +50,8 @@ import com.proxod3.nogravityzone.ui.shared_components.ExerciseListItemData
 import com.proxod3.nogravityzone.ui.shared_components.ExerciseListItemType
 import com.proxod3.nogravityzone.ui.shared_components.LoadingIndicator
 import kotlinx.coroutines.launch
-//todo fix downloading all exercises on first startup takes too long (at least show progress and make cancelable)
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExerciseListScreen(
@@ -95,7 +94,7 @@ fun ExerciseListScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 private fun ExercisesContent(
     uiState: ExerciseListUiState,
@@ -107,58 +106,59 @@ private fun ExercisesContent(
     onRetry: () -> Unit
 ) {
 
-        Column(
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+
+
+        CustomTopAppBar(
+            title = "Exercises",
+            navigationIcon = Icons.AutoMirrored.Filled.ArrowBack,
+            onNavigationClick = onNavigateBack,
+            actionIcons = listOf(Icons.Default.FilterList),
+            onActionClicks = listOf { onShowFilters() },
+
+            )
+
+
+        SearchBar(
+            searchQuery = uiState.searchQuery,
+            onQueryChange = onQueryChange,
             modifier = Modifier
-                .fillMaxSize()
-        ) {
+                .padding(16.dp)
+                .fillMaxWidth()
+        )
 
+        when (uiState.dataState) {
+            is DataState.Loading -> LoadingIndicator() // Show loading indicator
 
-            CustomTopAppBar(
-                title =  "Exercises",
-                navigationIcon = Icons.AutoMirrored.Filled.ArrowBack,
-                onNavigationClick = onNavigateBack,
-                actionIcons = listOf(Icons.Default.FilterList),
-                onActionClicks = listOf { onShowFilters() },
-
+            is DataState.Error -> ErrorContent(
+                // Error loading *cached* data
+                message = uiState.dataState.message,
+                showRetryButton = false, //  don't show retry for cache errors
+                onRetry = onRetry,
             )
 
-
-            SearchBar(
-                searchQuery = uiState.searchQuery,
-                onQueryChange = onQueryChange,
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
+            is DataState.InitialDownloadRequired -> InitialDownloadContent(
+                message = uiState.dataState.message,
+                onRetry = onRetry // Use the same retry function (VM logic handles it)
             )
 
-            when (uiState.dataState) {
-                is DataState.Loading -> LoadingIndicator() // Show loading indicator
-
-                is DataState.Error -> ErrorContent( // Error loading *cached* data
-                    message = uiState.dataState.message,
-                    showRetryButton = false, //  don't show retry for cache errors
-                    onRetry = onRetry,
-                )
-
-                is DataState.InitialDownloadRequired -> InitialDownloadContent(
-                    message = uiState.dataState.message,
-                    onRetry = onRetry // Use the same retry function (VM logic handles it)
-                )
-
-                is DataState.Success -> { // Success - display list or empty message
-                    if (filteredExercises.isEmpty()) {
-                        EmptyContent(
-                            hasActiveFilters = uiState.filters.activeFilters != ActiveFilters()
-                        )
-                    } else {
-                        ExerciseList(
-                            exercises = filteredExercises,
-                            onExerciseClick = onExerciseClick,
-                        )
-                    }
+            is DataState.Success -> { // Success - display list or empty message
+                if (filteredExercises.isEmpty()) {
+                    EmptyContent(
+                        hasActiveFilters = uiState.filters.activeFilters != ActiveFilters()
+                    )
+                } else {
+                    ExerciseList(
+                        exercises = filteredExercises,
+                        onExerciseClick = onExerciseClick,
+                    )
                 }
             }
         }
+    }
 }
 
 @Composable
@@ -185,7 +185,7 @@ fun ExerciseList(
             )
             if (exercises.last() != exercise) {
                 HorizontalDivider()
-        }
+            }
         }
     }
 }
@@ -312,8 +312,8 @@ private fun ErrorContent(
         Spacer(modifier = Modifier.height(16.dp))
         if (showRetryButton) {
             Button(onClick = onRetry) {
-            Text("Retry")
-        }
+                Text("Retry")
+            }
         }
     }
 }
@@ -370,17 +370,6 @@ private fun EmptyContent(hasActiveFilters: Boolean) {
     }
 }
 
-@Composable
-private fun LoadingIndicator() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        CircularProgressIndicator()
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SearchBar(
     searchQuery: String,

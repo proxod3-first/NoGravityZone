@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 @HiltViewModel
 class ExerciseListViewModel @Inject constructor(
     private val exerciseDataManager: ExerciseDataManager,
@@ -40,6 +41,7 @@ class ExerciseListViewModel @Inject constructor(
                 target = state.filters.activeFilters.targetMuscle,
                 equipment = state.filters.activeFilters.equipment
             )
+
             else -> emptyList()
         }
     }.stateIn(
@@ -64,7 +66,10 @@ class ExerciseListViewModel @Inject constructor(
                     .onSuccess { result: CachedExerciseDataResult -> // Specify type
                         // Check if cache was actually populated
                         if (result.exercises.isEmpty()) {
-                            Log.w("ExerciseListViewModel", "Initial download was marked complete, but cache is empty. Triggering download again.")
+                            Log.w(
+                                "ExerciseListViewModel",
+                                "Initial download was marked complete, but cache is empty. Triggering download again."
+                            )
                             // Set state to trigger download UI
                             _uiState.update {
                                 it.copy(dataState = DataState.InitialDownloadRequired("Cache empty, please download exercises."))
@@ -86,7 +91,11 @@ class ExerciseListViewModel @Inject constructor(
                     .onFailure { error ->
                         Log.e("ExerciseListViewModel", "Error loading data from cache", error)
                         _uiState.update {
-                            it.copy(dataState = DataState.Error(error.message ?: "Error loading cached data"))
+                            it.copy(
+                                dataState = DataState.Error(
+                                    error.message ?: "Error loading cached data"
+                                )
+                            )
                         }
                     }
             } else {
@@ -109,12 +118,16 @@ class ExerciseListViewModel @Inject constructor(
 
                 val result = exerciseRepository.fetchAllExercisesAndCache(forceRefresh = true)
 
-                when(result) {
+                when (result) {
                     is ResultWrapper.Success -> {
-                        Log.i("ExerciseListViewModel", "Retry download successful. Reloading cached data.")
+                        Log.i(
+                            "ExerciseListViewModel",
+                            "Retry download successful. Reloading cached data."
+                        )
                         // Now that download succeeded, load data from cache
                         loadInitialData()
                     }
+
                     is ResultWrapper.Error -> {
                         Log.e("ExerciseListViewModel", "Retry download failed.", result.exception)
                         // Stay in the download required state, update message
@@ -122,12 +135,17 @@ class ExerciseListViewModel @Inject constructor(
                             it.copy(dataState = DataState.InitialDownloadRequired("Download failed. Please try again."))
                         }
                     }
-                    is ResultWrapper.Loading -> { /* Should not happen */ }
+
+                    is ResultWrapper.Loading -> { /* Should not happen */
+                    }
                 }
             }
         } else {
             // If retry is called in other states (e.g. Error loading cache), just reload cache
-            Log.d("ExerciseListViewModel", "Retry called in non-download state. Reloading cached data.")
+            Log.d(
+                "ExerciseListViewModel",
+                "Retry called in non-download state. Reloading cached data."
+            )
             loadInitialData()
         }
     }
@@ -137,18 +155,20 @@ class ExerciseListViewModel @Inject constructor(
     }
 
     fun updateFilters(newFilters: ActiveFilters) {
-        _uiState.update { it.copy(
-            filters = it.filters.copy(activeFilters = newFilters)
-        )}
+        _uiState.update {
+            it.copy(
+                filters = it.filters.copy(activeFilters = newFilters)
+            )
+        }
     }
 
     fun clearFilters() {
-        _uiState.update { it.copy(
-            filters = it.filters.copy(activeFilters = ActiveFilters())
-        )}
+        _uiState.update {
+            it.copy(
+                filters = it.filters.copy(activeFilters = ActiveFilters())
+            )
+        }
     }
-
-
 }
 
 
@@ -172,8 +192,9 @@ data class ActiveFilters(
 )
 
 sealed class DataState {
-    object Loading : DataState()
+    data object Loading : DataState()
     data class Success(val exercises: List<Exercise>) : DataState()
     data class Error(val message: String) : DataState() // Error loading CACHED data
-    data class InitialDownloadRequired(val message: String) : DataState() // Cache empty/download failed
+    data class InitialDownloadRequired(val message: String) :
+        DataState() // Cache empty/download failed
 }
