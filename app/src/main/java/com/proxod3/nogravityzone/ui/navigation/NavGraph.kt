@@ -1,4 +1,3 @@
-
 import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.layout.Box
@@ -47,6 +46,7 @@ import com.proxod3.nogravityzone.ui.screens.workout_details.WorkoutDetailsScreen
 import com.proxod3.nogravityzone.ui.screens.workout_list.WorkoutListScreen
 import com.google.gson.Gson
 import javax.inject.Inject
+
 
 // NavigationRoutes.kt
 object NavigationRoutes {
@@ -287,7 +287,6 @@ private fun NavGraphBuilder.mainGraph(navigator: AppNavigator) {
             )
         }
 
-        // Additional screens with similar pattern...
         // Exercise Details Screen
         composable(
             route = "${Screen.Exercise.route}?${NavigationArgs.EXERCISE}={${NavigationArgs.EXERCISE}}",
@@ -322,7 +321,7 @@ private fun NavGraphBuilder.mainGraph(navigator: AppNavigator) {
         // ExerciseList Screen
         composable(
             route = Screen.Main.ExerciseList.route,
-        ) { backStackEntry ->
+        ) {
             ExerciseListScreen(
                 navigateToExercise = navigator::navigateToExerciseDetails,
                 navigateBack = navigator::navigateBack
@@ -332,14 +331,12 @@ private fun NavGraphBuilder.mainGraph(navigator: AppNavigator) {
         //Workout list screen
         composable(
             route = Screen.Main.WorkoutList.route,
-        ) { backStackEntry ->
+        ) {
             WorkoutListScreen(
                 navigateToWorkoutDetails = navigator::navigateToWorkoutDetails,
             )
 
-    }
-
-
+        }
 
         //Workout Details Screen
         composable(
@@ -367,7 +364,7 @@ private fun NavGraphBuilder.mainGraph(navigator: AppNavigator) {
         }
 
         // Workout Setup Screen
-        composable(route = Screen.WorkoutSetup.route) { backStackEntry ->
+        composable(route = Screen.WorkoutSetup.route) {
             WorkoutSetupScreen(
                 navigateToFeed = navigator::navigateToFeed,
                 navigateBack = navigator::navigateBack,
@@ -381,9 +378,8 @@ private fun NavGraphBuilder.mainGraph(navigator: AppNavigator) {
                 onNavigateBack = navigator::navigateBack,
             )
         }
-
     }
-    }
+}
 
 // MainScreen.kt
 @Composable
@@ -398,9 +394,11 @@ fun MainScreen(authState: AuthUiState) {
                 is AuthUiState.Authenticated -> {
                     navigator.navigateToMain()
                 }
+
                 is AuthUiState.Unauthenticated -> {
                     navigator.navigateToAuth()
                 }
+
                 is AuthUiState.Loading -> {
                     // Show loading screen
                 }
@@ -415,6 +413,7 @@ fun MainScreen(authState: AuthUiState) {
         is AuthUiState.Loading -> {
             LoadingScreen()
         }
+
         else -> {
             AppNavigation(navController = navController, navigator = navigator)
         }
@@ -432,14 +431,17 @@ fun MainScreen(authState: AuthUiState) {
         }
     ) { paddingValues ->
         // Box layout to handle padding values
-        Box(modifier = Modifier.fillMaxSize().padding(bottom = paddingValues.calculateBottomPadding())) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = paddingValues.calculateBottomPadding())
+        ) {
             // App navigation setup
             AppNavigation(
                 navController = navController
             )
         }
     }
-
 }
 
 
@@ -484,7 +486,7 @@ fun BottomNavBar(navController: NavHostController) {
             }
         }
     }
-    }
+}
 
 @Composable
 fun LoadingScreen() {

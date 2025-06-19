@@ -13,8 +13,8 @@ data class Hashtag(
     val tag: String = "",
     val useCount: Int = 0,
     val lastUsed: Timestamp = Timestamp.now()
-){
-    companion object{
+) {
+    companion object {
         const val HASHTAGS_COLLECTION = "hashtags"
         const val TAG = "tag"
         const val HASHTAG_USE_COUNT = "useCount"
@@ -31,4 +31,4 @@ data class Hashtag(
  * @receiver The String to be converted to a Hashtag.
  * @return A Hashtag object with the tag set to the String value, useCount initialized to 1, and lastUsed set to the current system time.
  */
-fun String.toHashtag(): Hashtag = Hashtag(tag = this,  useCount = 1, lastUsed = Timestamp.now())
+fun String.toHashtag(): Hashtag = Hashtag(tag = this, useCount = 1, lastUsed = Timestamp.now())

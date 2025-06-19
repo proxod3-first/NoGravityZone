@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 interface CommentLikeDao {
 
     @Query("SELECT * FROM comment_likes WHERE user_id = :userId AND comment_id = :commentId AND post_id = :postId LIMIT 1")
-     fun isCommentLiked(userId: String,commentId: String, postId: String): Flow<CommentLikeEntity?>
+    fun isCommentLiked(userId: String, commentId: String, postId: String): Flow<CommentLikeEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLike(like: CommentLikeEntity)

@@ -35,8 +35,6 @@ data class FeedPost(
         const val POST_METRICS = "postMetrics"
         const val POST_LIKES = "likes"
         const val POST_CREATOR = "postCreator"
-        const val CREATOR_ID = "creatorId"
-        const val POST_TAGS = "tags"
         const val POSTS_COLLECTION = "posts" // Collection name for posts
         const val CREATED_AT = "createdAt"
         fun createId(): String = generateRandomId(POST)

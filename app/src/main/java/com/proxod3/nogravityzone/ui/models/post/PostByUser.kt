@@ -9,11 +9,9 @@ import com.google.firebase.Timestamp
  */
 data class PostByUserEntry(
     val createdAt: Timestamp = Timestamp.now(),
-)
-{
+) {
     companion object {
         const val POSTS_BY_USER_COLLECTION = "posts_by_user"
         const val CREATED_AT = "createdAt"
-
-}
+    }
 }

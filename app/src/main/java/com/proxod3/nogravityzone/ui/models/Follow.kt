@@ -15,14 +15,13 @@ data class Follow(
     val followerId: String = "",
     val followedId: String = "",
     val timestamp: Timestamp = Timestamp.now()
-){
+) {
     companion object {
         fun createId(followerId: String, followedId: String) = "${followerId}_${followedId}"
         const val FOLLOWER_ID = "followerId"
         const val FOLLOWED_ID = "followedId"
-    const val FOLLOWS_COLLECTION = "follows" // Collection name for follows
+        const val FOLLOWS_COLLECTION = "follows" // Collection name for follows
     }
-
 }
 
 

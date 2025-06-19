@@ -27,6 +27,7 @@ class FeedRepository(
     companion object {
         // Number of posts to fetch per page
         const val PAGE_SIZE = 10
+
         // Firestore 'whereIn' query limit (currently 30)
         private const val WHERE_IN_LIMIT = 30
     }
@@ -46,16 +47,20 @@ class FeedRepository(
         // If a user follows more people, we need multiple queries.
         // TODO: Implement multi-query logic if relevantUserIds.size > WHERE_IN_LIMIT
         if (relevantUserIds.size > WHERE_IN_LIMIT) {
-            Log.w("FeedRepository", "Querying for ${relevantUserIds.size} users, exceeding Firestore 'whereIn' limit of $WHERE_IN_LIMIT. Feed may be incomplete. Implement multi-query logic.")
-            // For now, we'll query only the first chunk, but this is incorrect for > 30 follows
-            // return ResultWrapper.Error(Exception("Cannot query feed for more than $WHERE_IN_LIMIT followed users yet.")) // Or truncate list
+            Log.w(
+                "FeedRepository",
+                "Querying for ${relevantUserIds.size} users, exceeding Firestore 'whereIn' limit of $WHERE_IN_LIMIT. Feed may be incomplete. Implement multi-query logic."
+            )
         }
 
         return try {
             // Base query on the posts collection
             var query: Query = firestore.collection(POSTS_COLLECTION)
                 // Filter posts where the creator's ID is in the list of relevant users
-                .whereIn("$POST_CREATOR.id", relevantUserIds.take(WHERE_IN_LIMIT)) // Use take() as temporary fix for >30 limit
+                .whereIn(
+                    "$POST_CREATOR.id",
+                    relevantUserIds.take(WHERE_IN_LIMIT)
+                ) // Use take() as temporary fix for >30 limit
                 // Order by creation timestamp descending (newest first)
                 .orderBy(CREATED_AT, Query.Direction.DESCENDING)
                 // Add secondary ordering by ID for stable pagination if timestamps clash
@@ -78,7 +83,11 @@ class FeedRepository(
                 try {
                     document.toObject(FeedPost::class.java)
                 } catch (e: Exception) {
-                    Log.e("FeedRepository", "Error converting document ${document.id} to FeedPost", e)
+                    Log.e(
+                        "FeedRepository",
+                        "Error converting document ${document.id} to FeedPost",
+                        e
+                    )
                     null // Skip documents that fail conversion
                 }
             }

@@ -19,10 +19,6 @@ data class CommentLike(
     val postId: String = "",
     val timestamp: Timestamp = Timestamp.now()
 ) {
-    fun toEntity(): CommentLikeEntity {
-        return CommentLikeEntity.fromCommentLike(this)
-    }
-
     companion object {
         fun createId(userId: String, commentId: String, postId: String) =
             "${userId}_${commentId}_${postId}"

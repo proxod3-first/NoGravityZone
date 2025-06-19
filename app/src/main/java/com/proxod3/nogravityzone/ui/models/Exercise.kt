@@ -18,9 +18,8 @@ data class Exercise(
     val target: String = "",
     val secondaryMuscles: List<String> = emptyList(),
     val instructions: List<String> = emptyList(),
-    var screenshotPath: String? = null, // the path of a screenshot of the gif on the device,
-    // api doesn't provide an exercise image, so we take the exercise gif and extract an image from it
-    var isSavedLocally: Boolean = false // if the user saved this exercise locally
+    var screenshotPath: String? = null,
+    var isSavedLocally: Boolean = false
 ) : Parcelable
 
 
@@ -40,4 +39,3 @@ data class Equipment(
 data class TargetMuscle(
     @PrimaryKey val name: String
 )
-

@@ -209,7 +209,7 @@ object AppModule {
     fun provideFeedRepository(
         database: FirebaseFirestore,
     ): IFeedRepository {
-        return FeedRepository(database,)
+        return FeedRepository(database)
     }
 
     @Provides

@@ -14,8 +14,6 @@ import com.proxod3.nogravityzone.ui.models.post.PostCreator
 import com.proxod3.nogravityzone.ui.models.post.PostMetrics
 import com.proxod3.nogravityzone.utils.Utils.generateRandomId
 import com.google.firebase.Timestamp
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ServerValue
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -25,9 +23,15 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
+
 // Posts and feed management
 interface IPostRepository {
-    suspend fun createPost(feedPost: FeedPost, postAuthor: User?, selectedImages: List<Uri>): ResultWrapper<Unit>
+    suspend fun createPost(
+        feedPost: FeedPost,
+        postAuthor: User?,
+        selectedImages: List<Uri>
+    ): ResultWrapper<Unit>
+
     suspend fun getPostMetrics(postId: String): ResultWrapper<PostMetrics>
 }
 
@@ -59,9 +63,11 @@ class PostRepository @Inject constructor(
                     val comments = (metricsMap[PostMetrics.POST_METRICS_COMMENTS] as? Long) ?: 0L
                     val metrics = PostMetrics(likes = likes.toInt(), comments = comments.toInt())
                     ResultWrapper.Success(metrics)
-                }
-                else {
-                    Log.w("PostRepository", "Post metrics field missing or not a map for post $postId")
+                } else {
+                    Log.w(
+                        "PostRepository",
+                        "Post metrics field missing or not a map for post $postId"
+                    )
                     // Return default metrics if field missing
                     ResultWrapper.Success(PostMetrics()) // Or return Error
                 }
@@ -96,7 +102,7 @@ class PostRepository @Inject constructor(
 
         // 2. Prepare FeedPost data
         val postId = FeedPost.createId() // Generate unique ID for the post
-        val createdAt =Timestamp.now()
+        val createdAt = Timestamp.now()
         val modifiedFeedPost = feedPost.copy(
             id = postId,
             postCreator = PostCreator( // Ensure PostCreator is Firestore compatible
@@ -106,7 +112,8 @@ class PostRepository @Inject constructor(
             ),
             createdAt = createdAt,
             imageUrlList = imageUrls,
-            tags = feedPost.tags.map { it.lowercase().trim() }.filter { it.isNotEmpty() }.distinct() // Normalize tags
+            tags = feedPost.tags.map { it.lowercase().trim() }.filter { it.isNotEmpty() }
+                .distinct() // Normalize tags
             // Ensure PostMetrics() is initialized correctly
         )
 
@@ -166,33 +173,29 @@ class PostRepository @Inject constructor(
      *                   with a message describing the failure.
      *
      */
-    private suspend fun uploadImages(userId: String, images: List<Uri>): List<String> = coroutineScope {
-        val storageRef = storage.reference
+    private suspend fun uploadImages(userId: String, images: List<Uri>): List<String> =
+        coroutineScope {
+            val storageRef = storage.reference
 
-        images.map { imageUri ->
-            async {
-                try {
-                    // Create a unique filename for each image
-                    val filename = "${generateRandomId("image")}.jpg"
-                    val imageRef = storageRef
-                        .child(POSTS_COLLECTION)
-                        .child(userId)
-                        .child(filename)
+            images.map { imageUri ->
+                async {
+                    try {
+                        // Create a unique filename for each image
+                        val filename = "${generateRandomId("image")}.jpg"
+                        val imageRef = storageRef
+                            .child(POSTS_COLLECTION)
+                            .child(userId)
+                            .child(filename)
 
-                    // Upload the image
-                    imageRef.putFile(imageUri).await()
+                        // Upload the image
+                        imageRef.putFile(imageUri).await()
 
-                    // Get the download URL
-                    imageRef.downloadUrl.await().toString()
-                } catch (e: Exception) {
-                    throw Exception("Failed to upload image: ${e.message}")
+                        // Get the download URL
+                        imageRef.downloadUrl.await().toString()
+                    } catch (e: Exception) {
+                        throw Exception("Failed to upload image: ${e.message}")
+                    }
                 }
-            }
-        }.awaitAll() // Wait for all uploads to complete
-    }
-
-
-
-
-
+            }.awaitAll() // Wait for all uploads to complete
+        }
 }

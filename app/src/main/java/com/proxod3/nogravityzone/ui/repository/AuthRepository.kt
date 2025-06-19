@@ -26,6 +26,7 @@ interface IAuthRepository {
         email: String,
         displayName: String,
     ): ResultWrapper<User>
+
     fun isUserLoggedIn(): Flow<Boolean>
 }
 
@@ -34,7 +35,6 @@ class AuthRepository @Inject constructor(
     private val auth: FirebaseAuth,
     private val firestore: FirebaseFirestore,
 ) : IAuthRepository {
-
 
     override fun getCurrentUserId(): String {
         return auth.currentUser?.uid
@@ -88,7 +88,6 @@ class AuthRepository @Inject constructor(
     }
 
 
-
     override fun isUserLoggedIn(): Flow<Boolean> = callbackFlow {
         val listener = FirebaseAuth.AuthStateListener { auth ->
             trySend(auth.currentUser != null)
@@ -114,13 +113,12 @@ class AuthRepository @Inject constructor(
 
     override suspend fun signOut(): ResultWrapper<Unit> {
         return withContext(Dispatchers.IO) {
-             try {
+            try {
                 auth.signOut()
-                 ResultWrapper.Success(Unit)
+                ResultWrapper.Success(Unit)
             } catch (e: Exception) {
-                 ResultWrapper.Error(e)
+                ResultWrapper.Error(e)
             }
         }
     }
-
 }

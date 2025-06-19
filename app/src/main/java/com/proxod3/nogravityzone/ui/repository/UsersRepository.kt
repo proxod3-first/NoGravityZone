@@ -11,9 +11,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
+
 
 interface IUsersRepository {
     fun listenForUsersUpdates(): Flow<ResultWrapper<List<User>>>
@@ -22,15 +22,12 @@ interface IUsersRepository {
     fun getAllUsers(): Flow<List<User>>
 }
 
+
 class UsersRepository @Inject constructor(
-    private val auth: FirebaseAuth,
-    private val firestore: FirebaseFirestore
+    private val auth: FirebaseAuth, private val firestore: FirebaseFirestore
 ) : IUsersRepository {
     private val currentUserId = auth.currentUser?.uid
 
-    /**
-     * Listens for updates to the users collection in Firestore.
-     */
     override fun listenForUsersUpdates(): Flow<ResultWrapper<List<User>>> = callbackFlow {
         if (currentUserId == null) {
             trySend(ResultWrapper.Error(Exception("User not logged in")))
@@ -149,9 +146,6 @@ class UsersRepository @Inject constructor(
                 trySend(emptyList())
             }
         }
-
         awaitClose { listenerRegistration.remove() }
     }
-
 }
-
