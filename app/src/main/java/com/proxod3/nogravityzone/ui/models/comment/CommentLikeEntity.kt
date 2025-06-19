@@ -28,22 +28,4 @@ data class CommentLikeEntity(
     val postId: String = "",
     @ColumnInfo(name = "timestamp")
     val timestamp: Timestamp = Timestamp.now()
-) {
-    companion object {
-        fun fromCommentLike(commentLike: CommentLike) = CommentLikeEntity(
-            id = CommentLike.createId(commentLike.userId, commentLike.commentId, commentLike.postId),
-            userId = commentLike.userId,
-            commentId = commentLike.commentId,
-            postId = commentLike.postId,
-            timestamp = commentLike.timestamp
-        )
-
-        fun toCommentLike(commentLikeEntity: CommentLikeEntity) = CommentLike(
-            id = commentLikeEntity.id,
-            userId = commentLikeEntity.userId,
-            commentId = commentLikeEntity.commentId,
-            postId = commentLikeEntity.postId,
-            timestamp = commentLikeEntity.timestamp
-        )
-    }
-}
+)
