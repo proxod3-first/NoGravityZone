@@ -53,24 +53,31 @@ class MainViewModel @Inject constructor(
         if (!exerciseDownloadPrefs.isInitialDownloadComplete()) {
             viewModelScope.launch {
                 Log.d("StartupViewModel", "Triggering initial exercise download...")
-                val result = exerciseRepository.fetchAllExercisesAndCache()
-                when (result) {
+                when (val result = exerciseRepository.fetchAllExercisesAndCache()) {
                     is ResultWrapper.Success -> {
-                        Log.i("StartupViewModel", "Initial exercise download completed successfully.")
+                        Log.i(
+                            "StartupViewModel",
+                            "Initial exercise download completed successfully."
+                        )
                         // Flag is set within the repository on success
                     }
+
                     is ResultWrapper.Error -> {
-                        Log.e("StartupViewModel", "Initial exercise download failed.", result.exception)
-                        // Handle error - maybe schedule retry with WorkManager or show user message
+                        Log.e(
+                            "StartupViewModel",
+                            "Initial exercise download failed.",
+                            result.exception
+                        )
                     }
-                    is ResultWrapper.Loading -> { /* Should not happen from suspend fun */ }
+
+                    is ResultWrapper.Loading -> { /* Should not happen from suspend fun */
+                    }
                 }
             }
         } else {
             Log.d("StartupViewModel", "Initial exercise download already complete.")
         }
     }
-
 }
 
 
