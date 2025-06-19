@@ -54,7 +54,6 @@ fun ExerciseInWorkoutListItem(
     modifier: Modifier = Modifier,
 ) {
 
-
     ListItem(
         headlineContent = {
             workoutExercise.exercise?.name?.let { Text(it) }
@@ -75,7 +74,7 @@ fun ExerciseInWorkoutListItem(
                 }
 
                 Spacer(modifier = Modifier.height(4.dp))
-            //todo
+                //todo
             }
         },
         leadingContent = {
@@ -248,7 +247,6 @@ fun ExerciseDetailsCardPreview() {
         }
     }
 }
-
 
 
 @Preview

@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.proxod3.nogravityzone.R
 import com.proxod3.nogravityzone.ui.AppTheme
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomTopAppBar(
@@ -113,10 +114,9 @@ fun PreviewCustomTopAppBar() {
             title = "Top App Bar",
             navigationIcon = Icons.Filled.Menu,
             onNavigationClick = { /* Handle navigation click */ },
-                  )
+        )
     }
 }
-
 
 
 @Preview
@@ -129,7 +129,7 @@ fun PreviewCustomTopAppBar2() {
             actionIcons = listOf(Icons.Filled.Save),
             onActionClicks = listOf { /* Handle action click */ },
 
-        )
+            )
     }
 }
 
@@ -143,6 +143,6 @@ fun PreviewCustomTopAppBar3() {
             actionDrawables = listOf(R.drawable.save_outlined),
             onActionClicks = listOf { /* Handle action click */ },
 
-        )
+            )
     }
 }

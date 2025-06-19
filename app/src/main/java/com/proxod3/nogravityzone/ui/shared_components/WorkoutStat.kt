@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.proxod3.nogravityzone.ui.AppTheme
 
 @Composable
- fun WorkoutStat(
+fun WorkoutStat(
     icon: ImageVector,
     value: String,
     modifier: Modifier = Modifier

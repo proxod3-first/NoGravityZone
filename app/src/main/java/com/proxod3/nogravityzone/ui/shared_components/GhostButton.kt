@@ -47,7 +47,9 @@ fun GhostButton(
     OutlinedButton(
         onClick = onClick,
 
-        modifier = modifier.scale(scale).height(56.dp),
+        modifier = modifier
+            .scale(scale)
+            .height(56.dp),
         shape = RoundedCornerShape(16.dp),
         enabled = enabled,
         colors = ButtonDefaults.outlinedButtonColors(

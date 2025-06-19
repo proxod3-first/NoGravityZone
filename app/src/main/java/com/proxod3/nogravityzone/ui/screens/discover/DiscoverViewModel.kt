@@ -22,13 +22,16 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 data class DiscoverData(
     val users: List<UserWithFollowStatus> = listOf(),
     val searchQuery: String = "",
     val user: User? = null,
 )
 
+
 data class UserWithFollowStatus(val user: User, val isFollowing: Boolean)
+
 
 sealed class DiscoverUiState {
     object Success : DiscoverUiState()
@@ -49,7 +52,7 @@ class DiscoverViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<DiscoverUiState>(DiscoverUiState.Loading)
     val uiState: StateFlow<DiscoverUiState> = _uiState.asStateFlow()
 
-      private val _discoverData = MutableStateFlow(DiscoverData())
+    private val _discoverData = MutableStateFlow(DiscoverData())
     var discoverData: StateFlow<DiscoverData> = _discoverData.asStateFlow()
 
 
@@ -61,7 +64,7 @@ class DiscoverViewModel @Inject constructor(
         // Transform the discover data state flow to filter users based on the search query.
         // If the search query is empty, return the original data. Otherwise, filter the users
         // whose display names contain the search query (case-insensitive).
-        discoverData= _discoverData.asStateFlow()
+        discoverData = _discoverData.asStateFlow()
             .map { data ->
                 if (data.searchQuery.isEmpty()) {
                     data
@@ -183,7 +186,7 @@ class DiscoverViewModel @Inject constructor(
 
                     is ResultWrapper.Loading -> {
                         Log.d("TAG", "followUnfollowUser: loading")
-                }
+                    }
                 }
 
             } catch (e: Exception) {

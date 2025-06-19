@@ -9,6 +9,7 @@ fun BuildType.buildConfigBooleanField(name: String, value: Boolean) {
     buildConfigField("Boolean", name, value.toString())
 }
 
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -22,7 +23,6 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
-
 
 
 android {
@@ -65,6 +65,7 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.7"
     }
+
     packagingOptions {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -98,7 +99,7 @@ android {
                 "proguard-rules.pro"
             )
 
-            buildConfigStringField( "SAMPLE_WORKOUT_IMAGE_URL", "")
+            buildConfigStringField("SAMPLE_WORKOUT_IMAGE_URL", "")
 
             buildConfigBooleanField("IS_APP_IN_DEBUG_MODE", false)
 
@@ -110,7 +111,7 @@ android {
             //Inherit from debug and override
             initWith(buildTypes.getByName("debug"))
 
-            buildConfigStringField( "SAMPLE_WORKOUT_IMAGE_URL", "")
+            buildConfigStringField("SAMPLE_WORKOUT_IMAGE_URL", "")
 
             // Override or add specific flags
             buildConfigBooleanField("IS_APP_IN_DEBUG_MODE", true)
@@ -125,8 +126,6 @@ android {
 
 }
 
-
-
 kapt {
     correctErrorTypes = true
     arguments {
@@ -136,23 +135,28 @@ kapt {
 
 dependencies {
 
-    //navigation
+    // Navigation
     implementation(libs.androidx.navigation.compose)
+
     // Places
     implementation(libs.places)
+
     // Map
     implementation(libs.play.services.maps)
+
     // Firebase
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
     implementation(libs.firebase.storage)
     implementation(libs.firebase.messaging)
-    //Material Icons
+
+    // Material Icons
     implementation(libs.androidx.material.icons.extended)
-    //Coil
+
+    // Coil
     implementation(libs.coil.compose)
 
-    //Dagger Hilt
+    // Dagger Hilt
     implementation(libs.hilt.android)
     implementation(libs.testng)
     implementation(libs.androidx.ui.test.junit4.android)
@@ -164,12 +168,12 @@ dependencies {
     androidTestImplementation(libs.androidx.core.testing)
     androidTestImplementation(libs.ext.junit)
     kapt(libs.dagger.hilt.android.compiler)
-    implementation (libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
 
-    //time ago
-    implementation (libs.timeago)
+    // time ago
+    implementation(libs.timeago)
 
-    //  testing
+    // testing
     androidTestImplementation(libs.ui.test.junit4)
     debugImplementation(libs.ui.test.manifest)
     testImplementation(libs.junit)
@@ -185,32 +189,36 @@ dependencies {
         exclude(group = "androidx.test.espresso", module = "espresso-core")
     }
 
-    // retrofit
-    implementation (libs.squareup.retrofit)
+    // Retrofit
+    implementation(libs.squareup.retrofit)
+
     // gson converter
-    implementation (libs.squareup.converter.gson)
-    //okhttp
-    implementation (libs.okhttp)
-    //http interceptor
+    implementation(libs.squareup.converter.gson)
+
+    // okhttp
+    implementation(libs.okhttp)
+
+    // http interceptor
     implementation(libs.logging.interceptor)
 
-    //glide for handling gifs
-    implementation (libs.glide)
-    ksp (libs.compiler)
+    // glide for handling gifs
+    implementation(libs.glide)
+    ksp(libs.compiler)
 
-    //Room
+    // Room
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     debugImplementation(libs.androidx.ui.tooling)
     ksp(libs.androidx.room.compiler)
     implementation(libs.kotlinx.serialization.json)
 
-    //Mockito  for unit tests
+    // Mockito  for unit tests
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.kotlin)
     //  Robolectric framework, which provides a simulated Android environment for unit tests.
     testImplementation(libs.robolectric)
-    //Default
+
+    // Default
     implementation(libs.material3)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -234,13 +242,13 @@ dependencies {
 }
 
 
-
 // Add version alignment strategy
 configurations.all {
     resolutionStrategy.eachDependency {
         if (requested.group == "androidx.test" ||
             requested.group == "androidx.test.ext" ||
-            requested.group == "androidx.test.espresso") {
+            requested.group == "androidx.test.espresso"
+        ) {
             requested.version?.let { useVersion(it) }
         }
     }

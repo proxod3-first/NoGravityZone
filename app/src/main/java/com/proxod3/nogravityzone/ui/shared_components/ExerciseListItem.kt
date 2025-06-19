@@ -5,7 +5,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -21,7 +20,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
@@ -29,7 +27,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -132,9 +129,18 @@ fun ExerciseListItem(
                         is ExerciseListItemData.WorkoutExerciseData -> data.workoutExercise.exercise?.target.orEmpty()
                     }
 
-                    if (bodyPart.isNotEmpty()) CustomChip(bodyPart, modifier = Modifier.padding(vertical = 2.dp))
-                    if (equipment.isNotEmpty()) CustomChip(equipment, modifier = Modifier.padding(vertical = 2.dp))
-                    if (target.isNotEmpty()) CustomChip(target, modifier = Modifier.padding(vertical = 2.dp))
+                    if (bodyPart.isNotEmpty()) CustomChip(
+                        bodyPart,
+                        modifier = Modifier.padding(vertical = 2.dp)
+                    )
+                    if (equipment.isNotEmpty()) CustomChip(
+                        equipment,
+                        modifier = Modifier.padding(vertical = 2.dp)
+                    )
+                    if (target.isNotEmpty()) CustomChip(
+                        target,
+                        modifier = Modifier.padding(vertical = 2.dp)
+                    )
                 }
 
                 if (type == ExerciseListItemType.WORKOUT_ADDED_TO_EXERCISE && data is ExerciseListItemData.WorkoutExerciseData) {
@@ -155,6 +161,7 @@ fun ExerciseListItem(
                         tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                     )
                 }
+
                 ExerciseListItemType.WORKOUT_NOT_ADDED_TO_EXERCISE -> {
                     Icon(
                         imageVector = Icons.Default.Add,
@@ -169,6 +176,7 @@ fun ExerciseListItem(
                         tint = MaterialTheme.colorScheme.primary
                     )
                 }
+
                 ExerciseListItemType.WORKOUT_ADDED_TO_EXERCISE -> {
                     if (data is ExerciseListItemData.WorkoutExerciseData) {
                         Row(
@@ -247,74 +255,74 @@ private fun WorkoutDetails(workoutExercise: WorkoutExercise) {
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-            Text(
-                text = "Order: ${workoutExercise.order}",
-                style = MaterialTheme.typography.bodySmall.copy(
-                    fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-                )
+        Text(
+            text = "Order: ${workoutExercise.order}",
+            style = MaterialTheme.typography.bodySmall.copy(
+                fontSize = 12.sp,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
             )
-            Text(
-                text = "${workoutExercise.sets} sets, ${workoutExercise.reps} reps",
-                style = MaterialTheme.typography.bodySmall.copy(
-                    fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-                )
+        )
+        Text(
+            text = "${workoutExercise.sets} sets, ${workoutExercise.reps} reps",
+            style = MaterialTheme.typography.bodySmall.copy(
+                fontSize = 12.sp,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
             )
-            Text(
-                text = "Rest: ${workoutExercise.restBetweenSets}s",
-                style = MaterialTheme.typography.bodySmall.copy(
-                    fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-                )
+        )
+        Text(
+            text = "Rest: ${workoutExercise.restBetweenSets}s",
+            style = MaterialTheme.typography.bodySmall.copy(
+                fontSize = 12.sp,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
             )
-        }
+        )
     }
+}
 
-    // Preview for EXERCISE type
-    @Preview(showBackground = true, name = "Exercise Item")
-    @Composable
-    fun ExerciseListItemExercisePreview() {
-        AppTheme {
-            ExerciseListItem(
-                data = ExerciseListItemData.ExerciseData(sampleExercise),
-                type = ExerciseListItemType.EXERCISE,
-                onClick = { /* No-op for preview */ },
-                onAddToWorkout = { /* No-op for preview */ },
-                onModify = { /* No-op for preview */ },
-                onDelete = { /* No-op for preview */ }
-            )
-        }
+// Preview for EXERCISE type
+@Preview(showBackground = true, name = "Exercise Item")
+@Composable
+fun ExerciseListItemExercisePreview() {
+    AppTheme {
+        ExerciseListItem(
+            data = ExerciseListItemData.ExerciseData(sampleExercise),
+            type = ExerciseListItemType.EXERCISE,
+            onClick = { /* No-op for preview */ },
+            onAddToWorkout = { /* No-op for preview */ },
+            onModify = { /* No-op for preview */ },
+            onDelete = { /* No-op for preview */ }
+        )
     }
+}
 
-    // Preview for WORKOUT_ADDED_TO_EXERCISE type
-    @Preview(showBackground = true, name = "Workout Exercise Item (Added)")
-    @Composable
-    fun ExerciseListItemWorkoutAddedPreview() {
-        AppTheme {
-            ExerciseListItem(
-                data = ExerciseListItemData.WorkoutExerciseData(sampleWorkoutExercise),
-                type = ExerciseListItemType.WORKOUT_ADDED_TO_EXERCISE,
-                onClick = { /* No-op for preview */ },
-                onAddToWorkout = { /* No-op for preview */ },
-                onModify = { /* No-op for preview */ },
-                onDelete = { /* No-op for preview */ }
-            )
-        }
+// Preview for WORKOUT_ADDED_TO_EXERCISE type
+@Preview(showBackground = true, name = "Workout Exercise Item (Added)")
+@Composable
+fun ExerciseListItemWorkoutAddedPreview() {
+    AppTheme {
+        ExerciseListItem(
+            data = ExerciseListItemData.WorkoutExerciseData(sampleWorkoutExercise),
+            type = ExerciseListItemType.WORKOUT_ADDED_TO_EXERCISE,
+            onClick = { /* No-op for preview */ },
+            onAddToWorkout = { /* No-op for preview */ },
+            onModify = { /* No-op for preview */ },
+            onDelete = { /* No-op for preview */ }
+        )
     }
+}
 
-    // Preview for WORKOUT_NOT_ADDED_TO_EXERCISE type
-    @Preview(showBackground = true, name = "Workout Exercise Item (Not Added)")
-    @Composable
-    fun ExerciseListItemWorkoutNotAddedPreview() {
-        AppTheme {
-            ExerciseListItem(
-                data = ExerciseListItemData.ExerciseData(sampleExercise),
-                type = ExerciseListItemType.WORKOUT_NOT_ADDED_TO_EXERCISE,
-                onClick = { /* No-op for preview */ },
-                onAddToWorkout = { /* No-op for preview */ },
-                onModify = { /* No-op for preview */ },
-                onDelete = { /* No-op for preview */ }
-            )
-        }
+// Preview for WORKOUT_NOT_ADDED_TO_EXERCISE type
+@Preview(showBackground = true, name = "Workout Exercise Item (Not Added)")
+@Composable
+fun ExerciseListItemWorkoutNotAddedPreview() {
+    AppTheme {
+        ExerciseListItem(
+            data = ExerciseListItemData.ExerciseData(sampleExercise),
+            type = ExerciseListItemType.WORKOUT_NOT_ADDED_TO_EXERCISE,
+            onClick = { /* No-op for preview */ },
+            onAddToWorkout = { /* No-op for preview */ },
+            onModify = { /* No-op for preview */ },
+            onDelete = { /* No-op for preview */ }
+        )
     }
+}

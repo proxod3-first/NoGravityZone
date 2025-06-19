@@ -104,7 +104,7 @@ class SignUpViewModel @Inject constructor(private val authRepository: AuthReposi
         _signUpFormData.update {
             it.copy(
                 password = password, isPasswordValid =
-                Utils.isValidFieldLength(password, Constants.MINIMUM_PASSWORD_LENGTH)
+                    Utils.isValidFieldLength(password, Constants.MINIMUM_PASSWORD_LENGTH)
             )
         }
     }
@@ -130,8 +130,6 @@ class SignUpViewModel @Inject constructor(private val authRepository: AuthReposi
             )
         }
     }
-
-
 }
 
 

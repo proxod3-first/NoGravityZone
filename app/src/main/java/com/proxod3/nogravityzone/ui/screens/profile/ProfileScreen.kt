@@ -26,7 +26,7 @@ import com.proxod3.nogravityzone.utils.MockData.sampleUser
 import com.proxod3.nogravityzone.utils.MockData.sampleWorkoutWithStatus
 import com.proxod3.nogravityzone.utils.Utils.showToast
 
-//todo fix infinite loading on opening other user profile
+
 @Composable
 fun ProfileScreen(
     userId: String?,

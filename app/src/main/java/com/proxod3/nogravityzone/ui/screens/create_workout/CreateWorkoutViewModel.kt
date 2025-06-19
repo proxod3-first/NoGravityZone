@@ -342,25 +342,16 @@ class CreateWorkoutViewModel @Inject constructor(
                     resetUiState()
                     onSuccess()
                 }
+
                 is ResultWrapper.Error -> throw result.exception
                 else -> Unit
-            }
-        }
-
-        fun updateWorkout(update: (Workout) -> Workout) {
-            _uiState.update { state ->
-                state.copy(workout = update(state.workout))
             }
         }
 
         fun editWorkout(workout: Workout) {
             _uiState.update { it.copy(workout = workout) }
         }
-
-
     }
-
-
 
     fun resetUiState() {
         _uiState.value = UiState.WorkoutUiState().copy(

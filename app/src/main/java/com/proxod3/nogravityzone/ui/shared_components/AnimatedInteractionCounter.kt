@@ -21,7 +21,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -49,8 +50,8 @@ fun AnimatedInteractionCounter(
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    var lastClickTime by remember { mutableStateOf(0L) }
-    var previousCount by remember { mutableStateOf(count) }
+    var lastClickTime by remember { mutableLongStateOf(0L) }
+    var previousCount by remember { mutableIntStateOf(count) }
     val countDelta = count - previousCount
 
     // Update previous count after animation

@@ -27,7 +27,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.bumptech.glide.Glide
 import com.proxod3.nogravityzone.ui.models.Exercise
 
-@OptIn(ExperimentalLayoutApi::class)
+
 @Composable
 internal fun ExerciseContent(exercise: Exercise) {
     Column(

@@ -59,77 +59,77 @@ fun <T> ChipOptionList(
         isExpandedState.value = expanded
     }
 
-        Box(
-            modifier = Modifier
-                .padding(8.dp)
+    Box(
+        modifier = Modifier
+            .padding(8.dp)
+    ) {
+        FlowRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                // Expand/Collapse Button with animation
-                FilledIconButton(
-                    onClick = { isExpandedState.value = !isExpandedState.value },
-                    modifier = Modifier
-                        .size(40.dp)
-                        .align(Alignment.CenterVertically),
-                    shape = RoundedCornerShape(50),
-                    colors = IconButtonDefaults.filledIconButtonColors(
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        contentColor = MaterialTheme.colorScheme.onPrimary
-                    )
-                ) {
-                    Icon(
-                        imageVector = if (isExpandedState.value) Icons.Default.Close else Icons.Default.ArrowDropDown,
-                        contentDescription = if (isExpandedState.value) "Close" else "Expand",
-                        modifier = Modifier
-                            .rotate(if (isExpandedState.value) 180f else 0f)
-                            .animateContentSize(animationSpec = tween(300))
-                    )
-                }
-
-                // Label with enhanced styling
-                Text(
-                    text = label,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .padding(start = 8.dp)
+            // Expand/Collapse Button with animation
+            FilledIconButton(
+                onClick = { isExpandedState.value = !isExpandedState.value },
+                modifier = Modifier
+                    .size(40.dp)
+                    .align(Alignment.CenterVertically),
+                shape = RoundedCornerShape(50),
+                colors = IconButtonDefaults.filledIconButtonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
                 )
+            ) {
+                Icon(
+                    imageVector = if (isExpandedState.value) Icons.Default.Close else Icons.Default.ArrowDropDown,
+                    contentDescription = if (isExpandedState.value) "Close" else "Expand",
+                    modifier = Modifier
+                        .rotate(if (isExpandedState.value) 180f else 0f)
+                        .animateContentSize(animationSpec = tween(300))
+                )
+            }
 
-                // Chip Options with animation
-                AnimatedVisibility(
-                    visible = isExpandedState.value && !options.isNullOrEmpty(),
-                    enter = slideInVertically(initialOffsetY = { -it }) + fadeIn(),
-                    exit = slideOutVertically(targetOffsetY = { -it }) + fadeOut()
+            // Label with enhanced styling
+            Text(
+                text = label,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .padding(start = 8.dp)
+            )
+
+            // Chip Options with animation
+            AnimatedVisibility(
+                visible = isExpandedState.value && !options.isNullOrEmpty(),
+                enter = slideInVertically(initialOffsetY = { -it }) + fadeIn(),
+                exit = slideOutVertically(targetOffsetY = { -it }) + fadeOut()
+            ) {
+                FlowRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    FlowRow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        options?.forEach { option ->
-                            val optionName = when (option) {
-                                is BodyPart -> option.name
-                                is TargetMuscle -> option.name
-                                is Equipment -> option.name
-                                else -> "Unknown"
-                            }
-
-                            CustomChip(
-                                label = optionName,
-                                isSelected = option == selectedOption,
-                                onClick = { onOptionSelected(option) }
-                            )
+                    options?.forEach { option ->
+                        val optionName = when (option) {
+                            is BodyPart -> option.name
+                            is TargetMuscle -> option.name
+                            is Equipment -> option.name
+                            else -> "Unknown"
                         }
+
+                        CustomChip(
+                            label = optionName,
+                            isSelected = option == selectedOption,
+                            onClick = { onOptionSelected(option) }
+                        )
                     }
                 }
             }
+        }
     }
 }
 

@@ -60,7 +60,8 @@ fun ExpandableSection(
         ) {
             Text(
                 text = header,
-                style = MaterialTheme.typography.titleMedium)
+                style = MaterialTheme.typography.titleMedium
+            )
             Icon(
                 imageVector = if (isExpanded)
                     Icons.Default.KeyboardArrowUp

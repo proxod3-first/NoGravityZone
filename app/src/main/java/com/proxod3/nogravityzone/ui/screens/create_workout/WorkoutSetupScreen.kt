@@ -49,7 +49,6 @@ import com.proxod3.nogravityzone.utils.Utils.showToast
 
 @Composable
 fun WorkoutSetupScreen(
-    modifier: Modifier = Modifier,
     navigateToFeed: () -> Unit,
     navigateBack: () -> Unit,
     navigateToExercise: (Exercise) -> Unit,
@@ -117,6 +116,7 @@ fun WorkoutSetupScreen(
                 showToast(context, context.getString(R.string.workout_uploaded_successfully))
                 navigateToFeed()
             })
+
             is CreateWorkoutAction.EditWorkout -> viewModel.workoutManager.editWorkout(
                 event.workout
             )
@@ -198,7 +198,8 @@ private fun WorkoutSetupContent(
     ) {
 
         item {
-            WorkoutCoverImageContent(workout = uiState.workout,
+            WorkoutCoverImageContent(
+                workout = uiState.workout,
                 onEditWorkout = { onAction(CreateWorkoutAction.EditWorkout(it)) })
         }
 
@@ -232,8 +233,6 @@ private fun WorkoutSetupContent(
         }
     }
 }
-
-
 
 
 @Composable
@@ -348,7 +347,7 @@ private fun WorkoutExercisesSectionPreview() {
     AppTheme {
         WorkoutExercisesSection(
             exerciseList = listOf(
-             sampleWorkoutExercise,
+                sampleWorkoutExercise,
                 sampleWorkoutExercise.copy(exercise = sampleExercise.copy(name = "Exercise 2"))
             ),
             onDeleteExercise = { /* Handle delete */ },

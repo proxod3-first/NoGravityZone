@@ -69,10 +69,10 @@ internal fun ProfileExerciseListComponent(
                 )
                 if (exercise != exerciseList.last()) {
                     HorizontalDivider()
+                }
             }
         }
     }
-}
 }
 
 
@@ -85,8 +85,7 @@ fun ProfileExerciseComponent(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onExerciseClick(exercise) }
-           ,
+            .clickable { onExerciseClick(exercise) },
         verticalAlignment = Alignment.CenterVertically
     ) {
         // Exercise image - small size on left

@@ -10,6 +10,7 @@ sealed interface ProfileScreenAction {
     data object NavigateToWorkoutSetup : ProfileScreenAction
     data class NavigateToWorkoutDetails(val workoutWithStatus: WorkoutWithStatus) :
         ProfileScreenAction
+
     data object NavigateToExercisesList : ProfileScreenAction
     data class NavigateToExerciseDetails(val exercise: Exercise) : ProfileScreenAction
     data class ToggleFollow(val userToFollowOrUnfollowId: String) : ProfileScreenAction

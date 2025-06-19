@@ -40,16 +40,17 @@ fun WorkoutMetricsRow(
         ) {
 
             //Like icon and counter
-            AnimatedLikeCounter(isLiked = workoutWithStatus.isLiked,
+            AnimatedLikeCounter(
+                isLiked = workoutWithStatus.isLiked,
                 count = workoutWithStatus.workout.workoutMetrics.likesCount,
-                onLikeClick = {onLikeClick(workoutWithStatus.workout)},
+                onLikeClick = { onLikeClick(workoutWithStatus.workout) },
             )
 
             Box(
                 modifier = Modifier
                     .size(1.dp, 24.dp)
                     .background(MaterialTheme.colorScheme.outlineVariant)
-            ){
+            ) {
                 VerticalDivider(
                     thickness = 1.dp
                 )
@@ -59,8 +60,8 @@ fun WorkoutMetricsRow(
             AnimatedSaveCounter(
                 count = workoutWithStatus.workout.workoutMetrics.saveCount,
                 isSaved = workoutWithStatus.isSaved,
-                onSaveClick = {onSaveClick(workoutWithStatus.workout)},
-                showZeroCount =false
+                onSaveClick = { onSaveClick(workoutWithStatus.workout) },
+                showZeroCount = false
             )
 
         }

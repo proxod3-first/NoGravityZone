@@ -32,7 +32,6 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.PostAdd
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -60,7 +59,6 @@ import com.proxod3.nogravityzone.ui.shared_components.ProfileImageSmall
 import com.proxod3.nogravityzone.utils.MockData.samplePost
 import com.proxod3.nogravityzone.utils.MockData.sampleUser
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreatePostScreen(onNavigateBack: () -> Unit) {
     val viewModel = hiltViewModel<CreatePostViewModel>()
@@ -112,7 +110,7 @@ fun CreatePostContent(
             navigationIcon = Icons.AutoMirrored.Filled.ArrowBack,
             onNavigationClick = onNavigateBack,
             actionIcons = listOf(
-               Icons.Filled.PostAdd
+                Icons.Filled.PostAdd
             ),
             disabledActionIcons = if (!uiState.isPostButtonEnabled) listOf(Icons.Filled.PostAdd) else emptyList(), // Disable the PostAdd icon if post is empty
             onActionClicks = listOf {
@@ -125,11 +123,11 @@ fun CreatePostContent(
 
         if (uiState.isLoading) {
             // Show loading indicator
-             LoadingIndicator()
+            LoadingIndicator()
             return@Column
-        }else if (uiState.error != null) {
+        } else if (uiState.error != null) {
             // Show error message
-             ErrorComponent(text = stringResource( uiState.error))
+            ErrorComponent(text = stringResource(uiState.error))
             return@Column
         }
 

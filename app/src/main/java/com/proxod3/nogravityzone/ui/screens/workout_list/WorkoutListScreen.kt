@@ -60,8 +60,6 @@ import com.proxod3.nogravityzone.utils.MockData
 fun WorkoutListScreen(
     navigateToWorkoutDetails: (Workout, isLiked: Boolean, isSaved: Boolean) -> Unit
 ) {
-
-
     val viewModel: WorkoutListViewModel = hiltViewModel()
 
     val uiData by viewModel.uiData.collectAsState()
@@ -99,7 +97,7 @@ private fun WorkoutListContent(
         topBar = {
             CustomTopAppBar(
                 title = stringResource(R.string.workouts),
-                         )
+            )
         },
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
@@ -150,6 +148,7 @@ private fun WorkoutListContent(
                                 modifier = Modifier.align(Alignment.Center)
                             )
                         }
+
                         uiData.error != null -> {
                             ErrorContent(
                                 message = uiData.error,
@@ -161,6 +160,7 @@ private fun WorkoutListContent(
                                     .padding(16.dp)
                             )
                         }
+
                         else -> {
                             when {
                                 uiData.workoutWithStatusList.isEmpty() -> {
@@ -170,6 +170,7 @@ private fun WorkoutListContent(
                                             .padding(16.dp)
                                     )
                                 }
+
                                 else -> {
                                     WorkoutList(
                                         workoutList = uiData.workoutWithStatusList,
@@ -225,7 +226,8 @@ private fun WorkoutList(
                     onWorkoutSave = onWorkoutSave,
                     onWorkoutClick = onWorkoutClick,
                 ),
-                modifier = Modifier.animateItem(fadeInSpec = null, fadeOutSpec = null)
+                modifier = Modifier
+                    .animateItem(fadeInSpec = null, fadeOutSpec = null)
                     .padding(horizontal = 16.dp)
                     .clip(RoundedCornerShape(12.dp))
                     .background(MaterialTheme.colorScheme.surface)
@@ -279,9 +281,6 @@ private fun EmptyContent(modifier: Modifier = Modifier) {
     }
 }
 
-
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SearchBar(
@@ -305,7 +304,7 @@ private fun SearchBar(
             leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
             singleLine = true,
 
-        )
+            )
         Spacer(modifier = Modifier.width(8.dp))
         FilterMenu(
             options = filterOptionList,
@@ -389,6 +388,3 @@ fun PreviewWorkoutListEmptyScreen() {
         onAction = {}
     )
 }
-
-
-

@@ -28,44 +28,46 @@ fun PostInteractionRow(
     onCommentClick: () -> Unit = {},
 ) {
 
-Column {
-    HorizontalDivider(
-        thickness = 1.dp
-    )
-
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-
-        AnimatedLikeCounter(isLiked = isLiked,
-            count = likeAmount,
-            onLikeClick = {onLikeClick()},
-        )
-
-        Box(
-            modifier = Modifier
-                .size(1.dp, 24.dp)
-                .background(MaterialTheme.colorScheme.outlineVariant)
-        ){
-        VerticalDivider(
+    Column {
+        HorizontalDivider(
             thickness = 1.dp
-        )}
-
-        AnimatedCommentCounter(
-            count = commentAmount,
-            onCommentClick = {onCommentClick()},
         )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            AnimatedLikeCounter(
+                isLiked = isLiked,
+                count = likeAmount,
+                onLikeClick = { onLikeClick() },
+            )
+
+            Box(
+                modifier = Modifier
+                    .size(1.dp, 24.dp)
+                    .background(MaterialTheme.colorScheme.outlineVariant)
+            ) {
+                VerticalDivider(
+                    thickness = 1.dp
+                )
+            }
+
+            AnimatedCommentCounter(
+                count = commentAmount,
+                onCommentClick = { onCommentClick() },
+            )
+
+        }
+
 
     }
-
-
-}
 }
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewPostInteractionRow() {
-    PostInteractionRow(5, {}, false, 8, {}, )
+    PostInteractionRow(5, {}, false, 8, {})
 }

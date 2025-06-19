@@ -44,7 +44,9 @@ internal fun ProfileWorkoutListComponent(
         )
     } else {
         LazyColumn(
-            modifier = modifier.fillMaxWidth().padding(vertical = 8.dp),
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
         ) {
             items(
                 items = workouts,

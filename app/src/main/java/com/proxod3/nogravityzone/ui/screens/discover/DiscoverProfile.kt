@@ -54,80 +54,81 @@ fun DiscoverProfile(
 ) {
 
     Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .clickable { onProfileClick(user.id) },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .clickable { onProfileClick(user.id) },
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            // Profile Image
+            ProfileImageSmall(
+                profilePictureUrl = user.profilePictureUrl,
+                modifier = Modifier
+                    .size(56.dp)
+                    .clip(CircleShape)
+            )
+
+            // User Info Column
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                // Profile Image
-                ProfileImageSmall(
-                    profilePictureUrl = user.profilePictureUrl,
-                    modifier = Modifier
-                        .size(56.dp)
-                        .clip(CircleShape)
+                // Display Name
+                Text(
+                    text = user.displayName,
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 0.5.sp
+                    )
                 )
 
-                // User Info Column
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                // Stats
+
+                FlowRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    // Display Name
-                    Text(
-                        text = user.displayName,
-                        style = MaterialTheme.typography.titleLarge.copy(
-                            fontWeight = FontWeight.Bold,
-                            letterSpacing = 0.5.sp
-                        )
+                    // Followers Count
+                    AnimatedStatsCounter(
+                        count = user.stats.followersCount,
+                        label = "followers"
                     )
 
-                    // Stats
+                    Icon(
+                        imageVector = Icons.Filled.FiberManualRecord,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(8.dp)
+                            .align(Alignment.CenterVertically)
+                    )
 
-                    FlowRow(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        // Followers Count
-                        AnimatedStatsCounter(
-                            count = user.stats.followersCount,
-                            label = "followers"
-                        )
-
-                        Icon(
-                            imageVector = Icons.Filled.FiberManualRecord,
-                            contentDescription = null,
-                            modifier = Modifier.size(8.dp)
-                                .align(Alignment.CenterVertically)
-                        )
-
-                        // Following Count
-                        AnimatedStatsCounter(
-                            count = user.stats.followingCount,
-                            label = "following"
-                        )
-                    }
-
-                    // Join Date
-                    Text(
-                        text = "Joined ${formatRelativeTimeFromFireStoreTimeStamp(user.joinDate)}",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    // Following Count
+                    AnimatedStatsCounter(
+                        count = user.stats.followingCount,
+                        label = "following"
                     )
                 }
 
-                // Follow Button
-                AnimatedFollowIconButton(
-                    isFollowed = isFollowedByLocalUser,
-                    onClick = onFollowClick,
-                    modifier = Modifier.padding(start = 8.dp)
+                // Join Date
+                Text(
+                    text = "Joined ${formatRelativeTimeFromFireStoreTimeStamp(user.joinDate)}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
+
+            // Follow Button
+            AnimatedFollowIconButton(
+                isFollowed = isFollowedByLocalUser,
+                onClick = onFollowClick,
+                modifier = Modifier.padding(start = 8.dp)
+            )
         }
+    }
 }
 
 @Composable

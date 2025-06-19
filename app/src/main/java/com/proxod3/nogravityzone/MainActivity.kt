@@ -13,6 +13,7 @@ import com.proxod3.nogravityzone.ui.AppTheme
 import com.google.firebase.FirebaseApp
 import dagger.hilt.android.AndroidEntryPoint
 
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
