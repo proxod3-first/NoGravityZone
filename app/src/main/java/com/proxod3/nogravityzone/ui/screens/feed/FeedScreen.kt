@@ -14,8 +14,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Feed
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Feed
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -318,7 +318,7 @@ private fun EmptyFeedMessage() {
             verticalArrangement = Arrangement.Center
         ) {
             Icon(
-                imageVector = Icons.Default.Feed,
+                imageVector = Icons.AutoMirrored.Filled.Feed,
                 contentDescription = null,
                 modifier = Modifier
                     .width(48.dp)

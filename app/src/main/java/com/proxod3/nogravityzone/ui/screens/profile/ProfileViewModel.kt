@@ -14,8 +14,6 @@ import com.proxod3.nogravityzone.ui.repository.ISocialRepository
 import com.proxod3.nogravityzone.ui.repository.IUserRepository
 import com.proxod3.nogravityzone.ui.repository.IWorkoutRepository
 import com.proxod3.nogravityzone.ui.repository.ResultWrapper
-import com.proxod3.nogravityzone.ui.repository.onError
-import com.proxod3.nogravityzone.ui.repository.onSuccess
 import com.proxod3.nogravityzone.ui.room.CachedLike
 import com.proxod3.nogravityzone.ui.room.LikeType
 import com.proxod3.nogravityzone.ui.screens.workout_list.WorkoutWithStatus
@@ -37,8 +35,7 @@ data class ProfileUiData(
     val workoutWithStatusList: List<WorkoutWithStatus> = emptyList(),
     val isOwnProfile: Boolean = false,
     val exerciseList: List<Exercise> = emptyList()
-) {
-}
+)
 
 sealed class ProfileUiState {
     data class Success(val profileType: ProfileType) : ProfileUiState()
@@ -56,7 +53,7 @@ enum class ProfileType {
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val application: Application,
+    application: Application,
     private val userRepository: IUserRepository,
     private val authRepository: IAuthRepository,
     private val socialRepository: ISocialRepository,
@@ -108,9 +105,11 @@ class ProfileViewModel @Inject constructor(
                             val user = (results[0] as ResultWrapper.Success<User>).data
                             val posts = (results[1] as ResultWrapper.Success<List<FeedPost>>).data
                             val isFollowing = (results[2] as ResultWrapper.Success<Boolean>).data
-                            val localWorkouts = (results[3] as ResultWrapper.Success<List<Workout>>).data
+                            val localWorkouts =
+                                (results[3] as ResultWrapper.Success<List<Workout>>).data
                             val workoutLikes = results[4] as List<CachedLike?>
-                            val exerciseList = (results[5] as ResultWrapper.Success<List<Exercise>>).data
+                            val exerciseList =
+                                (results[5] as ResultWrapper.Success<List<Exercise>>).data
 
                             val processedData = ProcessedProfileData(
                                 user = user,
@@ -150,6 +149,7 @@ class ProfileViewModel @Inject constructor(
                                 if (userId == null) ProfileType.CURRENT_USER else ProfileType.OTHER_USER
                             )
                         }
+
                         is ResultWrapper.Error -> {
                             _uiState.value = ProfileUiState.Error.StringError(
                                 result.exception.message ?: "Unknown error"
@@ -177,30 +177,11 @@ class ProfileViewModel @Inject constructor(
         val workouts: List<WorkoutWithStatus>
     )
 
-    fun toggleFollow(userIdToFollowUnfollow: String?) {
+    fun toggleFollow() {
         viewModelScope.launch {
             TODO()
         }
     }
-
-    //todo use this
-    fun deleteLocalWorkout(workoutId: String) = viewModelScope.launch {
-            workoutRepository.deleteWorkoutLocally(workoutId).onSuccess {
-                loadLocalWorkouts() // Refresh local workouts after deletion
-            }.onError { exception ->
-                _uiState.update {
-                    ProfileUiState.Error.StringError(
-                        exception.message ?: "Unknown error"
-                    )
-                }
-            }
-    }
-
-    //todo when user deletes local workout
-    private fun loadLocalWorkouts() = viewModelScope.launch {
-
-    }
-
 
     fun logout(onLoggedOut: () -> Unit) {
         viewModelScope.launch {
@@ -211,12 +192,11 @@ class ProfileViewModel @Inject constructor(
                         result.exception.message ?: "Unknown error"
                     )
                 }
+
                 is ResultWrapper.Loading -> _uiState.value = ProfileUiState.Loading
             }
         }
     }
-
-
 
     fun onEditProfilePicture(imagePath: String) {
         viewModelScope.launch {

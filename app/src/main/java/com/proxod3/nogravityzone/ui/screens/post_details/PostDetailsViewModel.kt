@@ -189,18 +189,19 @@ class PostDetailsViewModel @Inject constructor(
                 when (val metricsResult = postRepository.getPostMetrics(postId)) {
                     is ResultWrapper.Success -> {
                         val metrics = metricsResult.data
-                        likeRepository.observeLikeStatus(targetId = postId, type = LikeType.POST).collectLatest { isLiked ->
-                            _postDetailsUiData.update { currentState ->
-                                currentState.copy(
-                                    feedPostWithLikesAndComments = currentState.feedPostWithLikesAndComments?.copy(
-                                        post = currentState.feedPostWithLikesAndComments.post.copy(
-                                            postMetrics = metrics
-                                        ),
-                                        isLiked = isLiked
+                        likeRepository.observeLikeStatus(targetId = postId, type = LikeType.POST)
+                            .collectLatest { isLiked ->
+                                _postDetailsUiData.update { currentState ->
+                                    currentState.copy(
+                                        feedPostWithLikesAndComments = currentState.feedPostWithLikesAndComments?.copy(
+                                            post = currentState.feedPostWithLikesAndComments.post.copy(
+                                                postMetrics = metrics
+                                            ),
+                                            isLiked = isLiked
+                                        )
                                     )
-                                )
+                                }
                             }
-                        }
                     }
 
                     is ResultWrapper.Error -> {
@@ -292,10 +293,9 @@ class PostDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 // Find the target comment to update
-                val targetComment =
-                    _postDetailsUiData.value.feedPostWithLikesAndComments?.commentList?.find {
-                        it.comment.id == commentId
-                    } ?: return@launch
+                _postDetailsUiData.value.feedPostWithLikesAndComments?.commentList?.find {
+                    it.comment.id == commentId
+                } ?: return@launch
 
                 // Optimistically update UI state
                 val updatedComments =
@@ -425,7 +425,7 @@ class PostDetailsViewModel @Inject constructor(
 
                         // Optimistically update UI state with the new comment
                         val currentComments =
-                            currentState.feedPostWithLikesAndComments?.commentList ?: emptyList()
+                            currentState.feedPostWithLikesAndComments.commentList
                         val updatedComments = currentComments + newCommentWithLikeStatus
                         _postDetailsUiData.update { currentState ->
                             currentState.copy(
@@ -486,6 +486,5 @@ class PostDetailsViewModel @Inject constructor(
             }
         }
     }
-
 
 }

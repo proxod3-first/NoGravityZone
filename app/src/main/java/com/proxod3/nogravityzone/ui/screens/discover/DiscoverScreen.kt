@@ -77,7 +77,7 @@ private fun DiscoverUserList(
 
                 is DiscoverUiState.Error.IntError -> {
                     ErrorComponent(
-                        text = stringResource((uiState as DiscoverUiState.Error.IntError).messageStringResource)
+                        text = stringResource(uiState.messageStringResource)
                     )
                 }
 
@@ -88,7 +88,7 @@ private fun DiscoverUserList(
                 }
 
                 is DiscoverUiState.Error.StringError -> ErrorComponent(
-                    text = (uiState as DiscoverUiState.Error.StringError).message
+                    text = uiState.message
                 )
             }
         }

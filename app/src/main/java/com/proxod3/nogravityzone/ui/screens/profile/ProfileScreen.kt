@@ -59,7 +59,7 @@ fun ProfileScreen(
                 navigateToLogin()
             }
 
-            is ProfileScreenAction.ToggleFollow -> viewModel.toggleFollow(action.userToFollowOrUnfollowId)
+            is ProfileScreenAction.ToggleFollow -> viewModel.toggleFollow()
         }
     }
 
@@ -74,7 +74,7 @@ private fun ProfileScreenContent(
     uiData: ProfileUiData,
     onAction: (ProfileScreenAction) -> Unit
 ) {
-    Column() {
+    Column {
         CustomTopAppBar(
             title = "Profile",
             navigationIcon = Icons.AutoMirrored.Filled.ArrowBack,

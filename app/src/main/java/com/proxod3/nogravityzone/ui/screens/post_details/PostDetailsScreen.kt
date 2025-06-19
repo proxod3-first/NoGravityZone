@@ -17,8 +17,9 @@ import com.proxod3.nogravityzone.ui.shared_components.LoadingIndicator
 import com.proxod3.nogravityzone.utils.MockData.samplePostWithLikesAndComments
 import com.proxod3.nogravityzone.utils.UiText
 
+
 @Composable
-fun PostDetailsScreen(navigateBack: () ->  Unit, post: FeedPost) {
+fun PostDetailsScreen(navigateBack: () -> Unit, post: FeedPost) {
 
     val viewModel: PostDetailsViewModel = hiltViewModel()
 
@@ -33,7 +34,13 @@ fun PostDetailsScreen(navigateBack: () ->  Unit, post: FeedPost) {
 
     val postDetails by viewModel.postDetailsUiData.collectAsState()
 
-    PostDetailsContent(navigateBack, postDetails, viewModel::togglePostLike, viewModel::toggleCommentLike, viewModel::addComment)
+    PostDetailsContent(
+        navigateBack,
+        postDetails,
+        viewModel::togglePostLike,
+        viewModel::toggleCommentLike,
+        viewModel::addComment
+    )
 }
 
 @Composable
@@ -73,7 +80,6 @@ private fun PostDetailsContent(
 }
 
 
-
 @Preview(showBackground = true)
 @Composable
 fun PostDetailsScreenPreview_Success() {
@@ -96,52 +102,52 @@ fun PostDetailsScreenPreview_Success() {
 @Composable
 fun PostDetailsScreenPreview_LoadingPost() {
     AppTheme {
-    PostDetailsContent(
-        navigateBack = { },
-        postDetails = PostDetailsUiData(
-            loadingPost = true,
-            loadingComments = false,
-        ),
-        togglePostLike = { },
-        toggleCommentLike = { },
-        submitComment = { },
-    )
-}
+        PostDetailsContent(
+            navigateBack = { },
+            postDetails = PostDetailsUiData(
+                loadingPost = true,
+                loadingComments = false,
+            ),
+            togglePostLike = { },
+            toggleCommentLike = { },
+            submitComment = { },
+        )
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun PostDetailsScreenPreview_LoadingComments() {
     AppTheme {
-    PostDetailsContent(
-        navigateBack = { },
-        postDetails = PostDetailsUiData(
-            loadingPost = false,
-            loadingComments = true,
-            feedPostWithLikesAndComments = samplePostWithLikesAndComments,
-        ),
-        togglePostLike = { },
-        toggleCommentLike = { },
-        submitComment = { },
-    )
-}
+        PostDetailsContent(
+            navigateBack = { },
+            postDetails = PostDetailsUiData(
+                loadingPost = false,
+                loadingComments = true,
+                feedPostWithLikesAndComments = samplePostWithLikesAndComments,
+            ),
+            togglePostLike = { },
+            toggleCommentLike = { },
+            submitComment = { },
+        )
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun PostDetailsScreenPreview_Error() {
     AppTheme {
-    PostDetailsContent(
-        navigateBack = { },
-        postDetails = PostDetailsUiData(
-            loadingPost = false,
-            loadingComments = false,
-            error = UiText.String("An error occurred"),
-        ),
-        togglePostLike = { },
-        toggleCommentLike = { },
-        submitComment = { },
-    )
-}
+        PostDetailsContent(
+            navigateBack = { },
+            postDetails = PostDetailsUiData(
+                loadingPost = false,
+                loadingComments = false,
+                error = UiText.String("An error occurred"),
+            ),
+            togglePostLike = { },
+            toggleCommentLike = { },
+            submitComment = { },
+        )
+    }
 }
 

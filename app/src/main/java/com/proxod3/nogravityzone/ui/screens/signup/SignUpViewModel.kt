@@ -26,8 +26,7 @@ data class SignUpFormData(
     val isEmailValid: Boolean = false,
     val isPasswordValid: Boolean = false,
     val username: String? = null
-) {
-}
+)
 
 sealed class SignUpUiState {
     object Initial : SignUpUiState()
@@ -73,7 +72,6 @@ class SignUpViewModel @Inject constructor(private val authRepository: AuthReposi
         ).onSuccess {
             // createUser success, save user data in db and update ui
             val userId: String = authRepository.getCurrentUserId()
-                ?: throw Exception("authenticateWithFirebase: com.proxod3.nogravityzone.ui.theme.models.User ID is null")
 
             _signUpFormData.update {
                 it.copy(

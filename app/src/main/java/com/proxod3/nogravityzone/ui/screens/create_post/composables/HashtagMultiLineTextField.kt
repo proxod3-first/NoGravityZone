@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -37,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.proxod3.nogravityzone.R
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun HashtagMultiLineTextField(
     value: String,
@@ -51,7 +50,6 @@ fun HashtagMultiLineTextField(
     ),
     minLines: Int = 5,
     maxLines: Int = 10,
-    onHashtagClick: (String) -> Unit = {},
     enabled: Boolean = true,
     isError: Boolean = false,
     supportingText: String? = null
@@ -106,11 +104,12 @@ fun HashtagMultiLineTextField(
         TextField(
             value = value,
             onValueChange = { newValue ->
-                val processedValue = if (newValue.lastOrNull() == '#' && newValue.length > value.length) {
-                    "$newValue "
-                } else {
-                    newValue
-                }
+                val processedValue =
+                    if (newValue.lastOrNull() == '#' && newValue.length > value.length) {
+                        "$newValue "
+                    } else {
+                        newValue
+                    }
                 onValueChange(processedValue)
             },
             modifier = Modifier
